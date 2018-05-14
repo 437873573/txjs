@@ -4,9 +4,9 @@
       <div class="confirm-wrapper">
         <div class="confirm-content">
           <header>{{head}}</header>
-          <p class="text" v-html="text"></p>
+          <slot></slot>
           <div class="operate">
-            <div @click="cancel" class="operate-btn left">{{ cancelBtnText }}</div>
+            <div v-show="canshow" @click="cancel" class="operate-btn left">{{ cancelBtnText }}</div>
             <div @click="confirm" class="operate-btn">{{ confirmBtnText }}</div>
           </div>
         </div>
@@ -26,6 +26,10 @@
     },
     props: {
       // 描述性文字
+      canshow: {
+        type: Boolean,
+        default: true
+      },
       head: {
         type: String,
         default: '提示'
@@ -36,7 +40,7 @@
       },
       cancelBtnText: {
         type: String,
-        default: '在考虑一下'
+        default: '再考虑一下'
       },
       confirmBtnText: {
         type: String,
@@ -85,7 +89,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 998;
+    z-index: 5;
     background-color: rgba(0, 0, 0, 0.2);
     &.confirm-fade-enter-active {
       animation: confirm-fadein 0.3s;
@@ -98,7 +102,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      z-index: 999;
+      z-index: 6;
       .confirm-content {
         width: 580px;
         border-radius: 20px;

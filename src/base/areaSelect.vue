@@ -80,15 +80,15 @@
     },
     methods: {
       select() {
-        this.$emit('areashow',this.CheckArea);
+        this.$emit('areashow');
+        this.$emit('get',this.CheckArea)
         var data = this.CheckArea.province + ' ' + this.CheckArea.city + ' ' + this.CheckArea.region;
         this.$emit('update:area', data)
-
       },
       selectArea(it) { // 高亮 省 市 区 其中一个
         this.areaStatus = it;
       },
-      checkProvOne(it, name,id) { // 选择省份
+      checkProvOne(it, name, id) { // 选择省份
         this.checkProvince = it;
         this.CheckArea.province = name;
         this.CheckArea.provinceId = id;
@@ -100,7 +100,7 @@
         this.checkRegion = 0,
           this.areaStatus = 2;
       },
-      checkCityOne(it, name, its,id) { // 选择市区
+      checkCityOne(it, name, its, id) { // 选择市区
         this.checkCity = it;
         this.CheckArea.province = this.data[its].name;
         this.CheckArea.city = name;
@@ -112,7 +112,7 @@
           this.areaStatus = 3;
 
       },
-      checkRegionOne(it, name,id) { // 选择区
+      checkRegionOne(it, name, id) { // 选择区
         this.CheckArea.province = this.data[this.checkProvince].name;
         this.CheckArea.city = this.data[this.checkProvince].child[this.checkCity].name;
         this.checkRegion = it;

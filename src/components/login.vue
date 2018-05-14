@@ -1,13 +1,13 @@
 <template>
   <section class="login">
     <div class="text">
-      <i class='icon-phone'></i>
-      <input type="text" placeholder="请输入您的手机号" name="phone" v-model="phone">
+      <i class='icon-login_img_phone'></i>
+      <input type="text" placeholder="请输入您的手机号" v-model="phone">
     </div>
     <div class="code">
       <div class="text">
-        <i class='icon-anq'></i>
-        <input type="text" placeholder="请输入验证码" name="code" v-model="code">
+        <i class='icon-login_img_sec'></i>
+        <input type="text" placeholder="请输入验证码" v-model="code">
       </div>
       <div class="btn o" v-show="show" @click="getCode">获取验证码</div>
       <div class="btn o disabled" v-show="!show">{{count}} s</div>
@@ -30,14 +30,28 @@
     },
     methods: {
       sub() {
-        this.$emit('next')
+        this.$http.post('/mobile-bind', {mobile: this.phone, scode: this.code}).then(r => {
+          if (r.status == 'success') {
+            this.$emit('next')
+          } else if (r.status == 'fail') {
+            this.$emit('show', r.mess)
+          }
+        }).catch(e => console.log(e))
       },
       getCode() {
+        if (this.phone) {
+          this.$http.post('/captcha-sms', {mobile: this.phone}).then(r => {
+            this._countdown()
+          }).catch(e => console.log(e))
+        } else {
+          this.$emit('show', '手机号码不能为空')
+        }
+      },
+      _countdown() {
         const TIME_COUNT = 60;
         if (!this.timer) {
           this.count = TIME_COUNT;
           this.show = false;
-          this._sendCode();
           this.timer = setInterval(() => {
             if (this.count > 0 && this.count <= TIME_COUNT) {
               this.count--;
@@ -49,9 +63,6 @@
           }, 1000)
         }
       },
-      _sendCode() {
-        this.$http.post('/captcha-sms', {data: {mobile: this.phone}})
-      }
     },
   }
 </script>
@@ -77,10 +88,9 @@
         width: 200px;
       }
     }
-    .icon-phone{
-      display: block;
+    i {
       font-size: 48px;
-      color: $color-text;
+      color: $color-theme;
     }
   }
 </style>

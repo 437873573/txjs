@@ -48,23 +48,18 @@ export default {
   width: 100%;
   background: $color-background-h;
   display: flex;
+  height: 88px;
   .switch-item {
     flex: 1;
-    padding: 30px 0;
-    margin: 0 74px;
+    line-height: 88px;
     box-sizing: border-box;
     font-size: $font-size-large;
     color: $color-text-l;
-    &:after{
-      width: 100%;
-      height: 6px;
-      position: absolute;
-      bottom: 0;
-      background: red;
-      border-left: 74px solid #fff;
-    }
+    border-bottom: 6px solid transparent;
     &.active {
       color: $color-theme;
+      border-bottom-color: $color-theme;
+      transition: border-bottom-color 0.5s;
     }
   }
 }

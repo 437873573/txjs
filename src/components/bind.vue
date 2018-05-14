@@ -5,9 +5,9 @@
       <div class="status-right" :class="status?'':'no'">绑定班级</div>
     </section>
     <keep-alive>
-      <router-view @next="next"></router-view>
+      <router-view @next="next" @show="show"></router-view>
     </keep-alive>
-    <Confirm :text="message"></Confirm>
+    <Confirm ref="confirm" :text="message" :confirmBtnText="text" :canshow="false" :head="head"></Confirm>
   </main>
 </template>
 
@@ -17,21 +17,23 @@
     data(){
       return{
         status:false,
-        message:'666'
+        head:'填写有以下错误',
+        message:'666',
+        text:'确定'
       }
     },
     methods:{
       next(){
+        this.status=true,
         this.$router.push({name:'info'})
+      },
+      show(mess){
+        this.message=mess
+        this.$refs.confirm.show()
       }
     },
     activated(){
-      let status=this.$route.query.status
-      if(status==0){
-        this.$router.push({name:'login'})
-      }else{
-        this.$router.push({name:'info'})
-      }
+      this.status=this.$route.query.status
     }
   }
 </script>

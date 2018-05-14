@@ -9,23 +9,22 @@
 <script>
   export default {
     name: 'App',
-    data(){
-      return{
-       bound:0
-      }
-    },
-    beforeCreate(){
-      if(!localStorage.accessToken){
-
-      }
-    },
     created() {
-      // this.$http.get('/profile').then(r=>console.log(r)).catch(err=>console.log(err))
-      if(this.bound==3){
-        this.$router.push({name: 'index'})
-      }else{
-        this.$router.push({name: 'bind',query:{status:this.bound}})
-      }
+      // this.$http.get('/profile').then(
+      //   r => {
+      //     this.bound = r.data.bound
+      //   }).then(
+      //   () => {
+      //     if ((this.bound & 1) == 0) {
+      //       this.$router.push({name: 'login'})
+      //     } else if ((this.bound & 2) == 0) {
+      //       this.$router.push({name: 'info',query:{status:1}})
+      //     } else {
+      //       this.$router.push({name: 'home'})
+      //     }
+      //   }
+      // ).catch(err => console.log(err))
+      this.$router.push({name: 'home'})
     }
   }
 </script>
