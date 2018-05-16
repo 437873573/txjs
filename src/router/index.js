@@ -12,6 +12,7 @@ import Create from 'components/create'
 import Shelf from 'components/shelf'
 import BookDetail from 'components/bookDetail'
 import Order from 'components/order'
+import OrderList from 'components/orderList'
 Vue.use(Router)
 
 export default new Router({
@@ -30,7 +31,7 @@ export default new Router({
           children:[
             {
               path:':id',
-              name:'bookDetail',
+              name:'indexBookDetail',
               component:BookDetail
             }
           ]
@@ -47,7 +48,7 @@ export default new Router({
             },
             {
               path:':id',
-              name:'bookDetail',
+              name:'shelfBookDetail',
               component:BookDetail,
             }
           ]
@@ -90,6 +91,11 @@ export default new Router({
       path:'/order',
       name:'order',
       component:Order
+    },
+    {
+      path:'/orderList',
+      name:'orderList',
+      component:OrderList,
     }
   ]
 })

@@ -70,7 +70,8 @@
   }
   &.o {
     color: $color-theme;
-    background: $color-background-h svg(square);
+    background: $color-background-h;
+    border: 1px solid $color-border;
   }
   &.disabled {
     background: $color-background-d;
@@ -102,36 +103,33 @@
   align-items: center;
 }
 
-%levCenter {
+//占据全屏
+%cover {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+//垂直居中
+%middle {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+%Center {
   position: absolute;
   left: 50%;
   transform: translate(-50%, 0);
 }
 
-%poCenter {
+//垂直居中
+%middleCenter {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-// 占据全屏
-// position: fixed;
-// top: 0;
-// left: 0;
-// right: 0;
-// bottom: 0;
-
-// 垂直居中
-// .no-result-wrapper {
-//   position: absolute;
-//   width: 100%;
-//   top: 50%;
-//   transform: translateY(-50%);
-// }
-
-// 垂直居中
-// position: absolute;
-// top: 50%;
-// left: 50%;
-// transform: translate(-50%, -50%);

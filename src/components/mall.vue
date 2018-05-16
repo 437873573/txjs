@@ -1,13 +1,29 @@
 <template>
-  <h1>商城开发中...</h1>
+  <main class="mall">
+    <img src="../common/img/mall_selected.png" alt="">
+  </main>
+
 </template>
 
 <script>
-    export default {
-        name: "mall"
-    }
+  export default {
+    name: "mall"
+  }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+  @import "common/scss/const.scss";
+  @import "common/scss/mymixin.scss";
+.mall{
+  position: fixed;
+  z-index: 3;
+  width: 100%;
+  top: 0;
+  bottom: 98px;
+}
+  img {
+    @extend %middleCenter;
+    width: 548px;
+    height: 359px;
+  }
 </style>

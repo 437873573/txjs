@@ -28,24 +28,18 @@
         </div>
         <nav>
           <div><img src="../common/img/home_icon_personal.png" alt=""><span>我的图书</span></div>
-          <div><img src="../common/img/home_icon_borrow.png" alt=""><span>借阅管理</span></div>
+          <router-link tag="div" :to="{path:'/orderList'}"><img src="../common/img/home_icon_borrow.png" alt=""><span>借阅管理</span>
+          </router-link>
           <div><img src="../common/img/home_icon_find.png" alt=""><span>发现更多</span></div>
           <div><img src="../common/img/home_icon_sign.png" alt=""><span>每日签到</span></div>
         </nav>
         <!-- 图书推荐列表 -->
         <div class="recommend-list">
-          <ul>
-            <li class="item" v-for="item in lists" :key="item.origin+item.id" @click="selectItem(item)">
-              <div class="img">
-                <img v-lazy="item.images_medium" alt="">
-              </div>
-              <div class="text">
-                <h3>{{item.title}}</h3>
-                <h4>{{item.author}} <span>校长推荐</span></h4>
-                <p v-html="item.summary"></p>
-              </div>
-            </li>
-          </ul>
+          <BookList :lists="lists" @select="selectItem"></BookList>
+        </div>
+        <!-- loading 组件 -->
+        <div class="loading" v-show="!lists.length">
+          <Loading></Loading>
         </div>
       </div>
     </Scroll>
@@ -56,22 +50,31 @@
 <script>
   import Slider from 'base/slider'
   import Scroll from 'base/scroll'
+  import Loading from 'base/loading'
+  import BookList from 'base/bookList'
   import {mapActions} from 'vuex'
+
   export default {
     name: "index",
+    components: {
+      Slider,
+      Scroll,
+      Loading,
+      BookList
+    },
     data() {
       return {
         banners: [],
         lists: [],
-        data:{},
+        data: {},
         searchMin: false
       }
     },
     methods: {
-      selectItem(item){
-        this.$router.push({path:`/index/${item.id}`});
+      selectItem(item) {
+        this.$router.push({path: `/index/${item.id}`});
         this.selectBook({
-          book:item
+          book: item
         })
       },
       scroll(pos) {
@@ -89,14 +92,14 @@
       //当首次获取到图片时，Better-scroll 重新计算
       loadImg() {
         if (!this.flag) {
-          this.$refs.scroll.refresh()
+          this.$refs.scroll.refresh();
           this.flag = true
         }
       },
       ...mapActions(['selectBook'])
     },
     beforeCreate() {
-      this.probeType = 3
+      this.probeType = 3;
       this.listenScroll = true
     },
     created() {
@@ -106,7 +109,7 @@
         if (r.status == 'success') {
           this.banners = r.data.banners
         }
-      })
+      });
       //获取推荐图书
       setTimeout(() => {
         this.$http.get('/book').then(r => {
@@ -117,10 +120,6 @@
         })
       }, 1000)
     },
-    components: {
-      Slider,
-      Scroll
-    }
   }
 </script>
 
@@ -183,7 +182,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      //@include extend-click()
     }
     .scan {
       left: 24px;
@@ -235,54 +233,10 @@
     }
   }
 
-  .recommend-list li {
-    margin: 20px 0;
-    padding: 12px 24px;
-    height: 240px;
-    box-sizing: border-box;
-    background: #fff;
-    @extend %start;
-    align-items: stretch;
-    .img {
-      margin-right: 26px;
-      img {
-        width: 160px;
-        height: 100%;
-      }
-    }
-    .text {
-      @extend %around;
-      padding: 10px 0;
-      box-sizing: border-box;
-      align-items: flex-start;
-      flex-direction: column;
-      h3 {
-        font-size: $font-size-large-x;
-        color: $color-text-d;
-        font-weight: bold;
-      }
-      h4 {
-        color: $color-text-l;
-        font-size: $font-size-medium;
-        @extend %start;
-        span {
-          flex: none;
-          display: block;
-          width: 124px;
-          height: 36px;
-          border: 1px solid $color-theme;
-          border-radius: 5px;
-          margin-left: 20px;
-          color: $color-theme;
-        }
-      }
-      p {
-        text-align: left;
-        font-size: $font-size-medium;
-        -webkit-box-orient: vertical;
-        @include no-wrap-multi(2)
-      }
-    }
+  .loading {
+    position: relative;
+    width: 100%;
+    height: 600px;
   }
 
   .fade-enter-active, .fade-leave-active {

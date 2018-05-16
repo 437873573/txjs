@@ -2,7 +2,6 @@ import $ from 'jquery'
 const weixin = {
   config: {
     url:'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+window.appId+'&redirect_uri='+encodeURIComponent(window.location.href)+'&response_type=code&scope=snsapi_userinfo#wechat_redirect',
-    // url:'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+window.appId+'&redirect_uri=http://txjs-wechat-hnw.mion.cn/api/third/wechat/access-token&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect',
     userInfo:JSON.parse(localStorage.getItem('MY_USER_INFO')),
     api:'http://txjs-wechat-hnw.mion.cn/api'
   },

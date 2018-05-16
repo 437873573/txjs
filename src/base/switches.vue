@@ -49,6 +49,9 @@ export default {
   background: $color-background-h;
   display: flex;
   height: 88px;
+  border-bottom: 1px solid $color-border;
+  position: relative;
+  z-index: 5;
   .switch-item {
     flex: 1;
     line-height: 88px;
@@ -59,7 +62,7 @@ export default {
     &.active {
       color: $color-theme;
       border-bottom-color: $color-theme;
-      transition: border-bottom-color 0.5s;
+      transition: border-bottom-color 0.3s;
     }
   }
 }

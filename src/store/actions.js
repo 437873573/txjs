@@ -34,10 +34,10 @@ export const clearHistory = function ({commit}) {
 }
 
 // 我的收藏
-export const savefavoriteList = function ({commit}, song) {
+export const saveFavoriteList = function ({commit}, song) {
   commit(types.SET_FAVORITE_LIST, saveFavorite(song))
 }
 
-export const delfavoriteList = function ({commit}, song) {
+export const delFavoriteList = function ({commit}, song) {
   commit(types.SET_FAVORITE_LIST, delFavorite(song))
 }

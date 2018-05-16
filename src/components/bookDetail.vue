@@ -14,20 +14,21 @@
       </header>
       <Switches :switches="switches" :currentIndex="currentIndex" @switch="switchItem"></Switches>
       <template>
-        <section class="detail" v-if="currentIndex==0">
+        <section class="detail" v-show="currentIndex==0">
           <Scroll class="detail-content" :data="[data.summary]">
             <p v-html="data.summary"></p>
           </Scroll>
           <footer>
             <div class="mark">
-              <i class="icon-tabbar_icon_collect_default"></i>
+              <i :class="getFavoriteCls(book)"
+                 @click="toggleFavoriteCls(book)"></i>
               收藏
             </div>
-            <div class="borrow" @click="borrow">立即借阅</div>
+            <div class="borrow" @click="borrow" :class="data.user&&data.user.length?'':'not'">立即借阅</div>
           </footer>
         </section>
-        <section class="comment" v-else-if="currentIndex==1">
-          <Scroll class="comment-content" :data="data.review">
+        <section class="comment" v-show="currentIndex==1">
+          <Scroll class="comment-content" :data="data.review" ref="comments">
             <ul class="comment-lists">
               <li class="item" v-for="(v,i) in data.review" :key="i">
                 <div class="item-left">
@@ -42,7 +43,7 @@
             </ul>
           </Scroll>
           <footer>
-            <input type="text" class="text" placeholder="我也来说两句" ref="text">
+            <input type="text" class="text" placeholder="我也来说两句" ref="text" v-model="content">
             <div class="btn s" @click="sub">提交</div>
           </footer>
         </section>
@@ -60,7 +61,6 @@
               </ul>
             </Scroll>
           </template>
-
         </Confirm>
       </template>
     </div>
@@ -71,18 +71,18 @@
   import {mapActions, mapGetters, mapMutations} from 'vuex'
   import Switches from 'base/switches'
   import Scroll from 'base/scroll'
-
   export default {
     name: "book-detail",
     components: {Switches, Scroll},
     data() {
       return {
         switches: [{name: '内容详情'}, {name: '书籍评论'}],
+        content:'',
         currentIndex: 0,
         data: {},
         head: '请选择书籍拥有者',
-        scrollX: true,
-        scrollY: false,
+        scrollX:true,
+        scrollY:false,
         oid: 0
       }
     },
@@ -94,21 +94,63 @@
       ])
     },
     methods: {
+      ...mapActions(['saveFavoriteList', 'delFavoriteList']),
+      toggleFavoriteCls(book) {
+        if (this._isFavorite(book)) {
+          this.delFavoriteList(book)
+        } else {
+          this.saveFavoriteList(book)
+        }
+      },
+      getFavoriteCls(book) {
+        if (this._isFavorite(book)) {
+          return 'icon-tabbar_icon_collect_selected'
+        } else {
+          return 'icon-tabbar_icon_collect_default'
+        }
+      },
+      _isFavorite(book) {
+        let index = this.favoriteList.findIndex((item) => {
+          return book.id === item.id
+        })
+        return index > -1
+      },
       switchItem(index) {
         this.currentIndex = index
+        if(index==1){
+          this.$refs.comments.scrollTo(0,0)
+        }
       },
       borrow() {
-        this.$refs.userLists.style.width = 168 * this.data.user.length / 7.5 + 'vw'
-        this.$refs.confirm.show()
+        if(this.data.user.length){
+          this.$refs.userLists.style.width = 168 * this.data.user.length / 7.5 + 'vw'
+          this.$refs.confirm.show()
+        }
       },
       toOrder() {
-        this.$http.post('/borrow/share-store',{user_book_id:this.oid}).then(r=>{
+        this.$http.post('/bill/share-store',{user_book_id:this.oid}).then(r=>{
           if(r.status=='success'){
-            // this.$router.push({path: '/order',params:{id:r.data.id,name:r.data.realname}})
+            this.$router.push({path: '/order',query:{id:r.data.id}})
           }
         })
       },
       sub() {
+        this.$http.post('/book/comment',{
+          book_id:this.book.id,
+          content:this.content
+        }).then(r=>{
+          if(r.status=='success'){
+            let data=r.data.review
+            this.data.review.unshift({
+              content:data.content,
+              time:data.time,
+              user:{
+                avatar:data.user.avatar,
+                nickname:data.user.nickname}})
+            this.content=''
+            this.$refs.comments.scrollTo(0,0)
+          }
+        });
         this.$refs.text.blur()
       }
     },
@@ -188,7 +230,6 @@
     }
     .detail, .comment {
       height: calc(100% - 424px);
-      border-top: 1px solid $color-border;
       footer {
         width: 100%;
         position: absolute;
@@ -221,6 +262,8 @@
           padding: 10px 0;
           box-sizing: border-box;
           font-size: $font-size-small-x;
+          background: #fff;
+          color: $color-theme;
           i {
             font-size: 48px;
           }
@@ -228,14 +271,28 @@
         .borrow {
           width: 500px;
           line-height: 98px;
+          box-sizing: border-box;
           background: $color-theme;
           font-size: $font-size-large-x;
           color: $color-text-ll;
+          &.not{
+            background: $color-background-d;
+            color: $color-text;
+            border: 1px solid $color-border;
+          }
         }
       }
     }
     .comment {
       position: relative;
+      &-content{
+        width: 100%;
+        position: absolute;
+        top: 0;
+        bottom: 98px;
+        overflow: hidden;
+        box-sizing: border-box;
+      }
       &-lists {
         padding: 0 24px;
         box-sizing: border-box;

@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <Tab></Tab>
+    <Tab :i="index"></Tab>
     <router-view></router-view>
   </div>
 </template>
@@ -11,6 +11,32 @@
 
   export default {
     name: "home",
+    data() {
+      return {
+        index: 0,
+      }
+    },
+    methods: {
+      hash() {
+        let hash = window.location.hash;
+        // console.log(hash)
+        if (hash == '#/library') {
+          return this.index = 1
+        } else if (hash == '#/mall') {
+          return this.index = 2
+        } else if (hash == '#/user') {
+          return this.index = 3
+        } else {
+          return this.index = 0
+        }
+      }
+    },
+    updated() {
+      this.hash()
+    },
+    activated() {
+      this.hash()
+    },
     components: {
       Tab,
     }

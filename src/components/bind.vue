@@ -1,8 +1,8 @@
 <template>
   <main class="bind">
     <section class="status">
-      <div class="status-left">绑定手机</div>
-      <div class="status-right" :class="status?'':'no'">绑定班级</div>
+      <div class="status-left">手机验证</div>
+      <div class="status-right" :class="status?'':'no'">添加班级</div>
     </section>
     <keep-alive>
       <router-view @next="next" @show="show"></router-view>
@@ -55,7 +55,7 @@
       &:before {
         content: '';
         display: block;
-        @extend %levCenter;
+        @extend %Center;
         top: -7px;
         width: 14px;
         height: 14px;

@@ -22,24 +22,27 @@
 <script>
   export default {
     name: 'tab',
-    data(){
-      return{
-        index:1
+    data() {
+      return {
+        arr: [1, 2, 3, 4]
       }
     },
-    // mounted(){
-    //   let hash=window.location.hash;
-    //   // console.log(hash)
-    //   if(hash=='#/library'){
-    //     return this.index=2
-    //   }else if(hash=='#/mall'){
-    //     return this.index=3
-    //   }else if(hash=='#/user'){
-    //     return this.index=4
-    //   }else{
-    //     return this.index=1
-    //   }
-    // }
+    computed: {
+      index: {
+        get: function () {
+          return this.arr[this.i]
+        },
+        set: function (val) {
+          return this.arr[val]
+        }
+      }
+    },
+    props: {
+      i: {
+        type: Number,
+        default: 0
+      }
+    },
   }
 </script>
 
@@ -65,7 +68,7 @@
       justify-content: space-between;
       align-items: center;
       color: $color-text;
-      i{
+      i {
         font-size: 48px;
       }
       &.router-link-active {

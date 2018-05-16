@@ -5,7 +5,7 @@
       <h2>龙口西小学图书馆</h2>
       <i class="icon-nav_icon_news"></i>
     </div>
-    <Scroll>
+    <Scroll :data="lists" class="library-content">
       <ul class="library-lists">
         <li v-for="v in lists" :key="v.id" @click="selectItem(v)">
           <img v-lazy="v.image" alt="">
@@ -63,6 +63,21 @@
     background: $color-background-h;
     border-bottom: 1px solid $color-border;
     @extend %between;
+    i{
+      font-size: $font-size-large-x;
+    }
+    h2{
+      font-size: $font-size-medium-x;
+      color: $color-text-d;
+    }
+  }
+
+  .library-content {
+    position: absolute;
+    top: 88px;
+    bottom: 98px;
+    left: 0;
+    right: 0;
   }
 
   .library-lists {

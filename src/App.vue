@@ -9,7 +9,7 @@
 <script>
   export default {
     name: 'App',
-    created() {
+    activated() {
       // this.$http.get('/profile').then(
       //   r => {
       //     this.bound = r.data.bound
