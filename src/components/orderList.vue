@@ -50,13 +50,13 @@
     },
     computed: {
       lists() {
-        let list=this.data.filter(v => {
+        let list = this.data.filter(v => {
           if (this.currentIndex == '1') {
             return v.status == 'APPLYING'
           } else if (this.currentIndex == '2') {
             return v.status == 'READING'
           } else if (this.currentIndex == '3') {
-            return v.status == 'FINISHED'||v.status == 'REJECT'||v.status == 'CANCEL'
+            return v.status == 'FINISHED' || v.status == 'REJECT' || v.status == 'CANCEL'
           } else {
             return v
           }
@@ -68,14 +68,14 @@
       switchItem(index) {
         this.currentIndex = index
       },
-      selectItem(id){
-        this.$router.push({path:`/order`,query:{id:id}})
+      selectItem(id) {
+        this.$router.push({path: '/order', query: {id: id}})
       }
     },
     activated() {
-      this.$http.get('/bill/index').then(r=>{
-        if(r.status=='success'){
-          this.data=r.data.borrowUserBooks
+      this.$http.get('/bill/index').then(r => {
+        if (r.status == 'success') {
+          this.data = r.data.borrowUserBooks
         }
       })
     }
@@ -85,7 +85,8 @@
 <style scoped lang="scss">
   @import "common/scss/const.scss";
   @import "common/scss/mymixin.scss";
-  .orderList-content{
+
+  .orderList-content {
     position: fixed;
     top: 89px;
     left: 0;
@@ -93,7 +94,8 @@
     bottom: 0;
     z-index: 4;
   }
-  .item{
+
+  .item {
     position: relative;
     width: 100%;
     height: 240px;
@@ -102,12 +104,12 @@
     box-sizing: border-box;
     margin-bottom: 18px;
     @extend %start;
-    img{
+    img {
       flex: none;
       width: 160px;
       height: 216px;
     }
-    .text{
+    .text {
       text-align: left;
       padding: 20px 24px;
       box-sizing: border-box;
@@ -131,7 +133,7 @@
         @include no-wrap
       }
     }
-    .type{
+    .type {
       position: absolute;
       top: 40px;
       right: 24px;
@@ -140,13 +142,13 @@
       line-height: 32px;
       font-size: $font-size-small;
       color: $color-text-ll;
-      background: rgb(101,208,171);
+      background: rgb(101, 208, 171);
       border-radius: 5px;
-      &.lend{
-        background: rgb(56,167,255);
+      &.lend {
+        background: rgb(56, 167, 255);
       }
     }
-    .status{
+    .status {
       position: absolute;
       right: 0;
       bottom: 24px;
@@ -155,8 +157,8 @@
       line-height: 60px;
       font-size: $font-size-medium;
       color: $color-text-ll;
-      background: rgb(255,169,76);
-      &.done{
+      background: rgb(255, 169, 76);
+      &.done {
         background: $color-background-d;
         color: $color-text-d;
       }

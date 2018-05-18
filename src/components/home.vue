@@ -20,11 +20,11 @@
       hash() {
         let hash = window.location.hash;
         // console.log(hash)
-        if (hash == '#/library') {
+        if (hash.search('library')!=-1) {
           return this.index = 1
-        } else if (hash == '#/mall') {
+        } else if (hash.search('mall')!=-1) {
           return this.index = 2
-        } else if (hash == '#/user') {
+        } else if (hash.search('user')!=-1) {
           return this.index = 3
         } else {
           return this.index = 0

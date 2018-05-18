@@ -1,177 +1,140 @@
 <template>
   <transition name="slide">
-    <div class="book-detail" v-show="showDetail">
-      <header>
-        <img v-lazy="data.images_large">
-        <article>
-          <h2 v-html="data.title"></h2>
-          <h3 v-html="data.author"></h3>
-          <h4>出版社: {{data.publisher}}</h4>
-          <h4>出版时间: {{data.pubdate}}</h4>
-          <h4>ISBN: {{data.isbn}}</h4>
-          <p><span>荐</span></p>
-        </article>
-      </header>
-      <Switches :switches="switches" :currentIndex="currentIndex" @switch="switchItem"></Switches>
-      <template>
-        <section class="detail" v-show="currentIndex==0">
-          <Scroll class="detail-content" :data="[data.summary]">
-            <p v-html="data.summary"></p>
-          </Scroll>
-          <footer>
-            <div class="mark">
-              <i :class="getFavoriteCls(book)"
-                 @click="toggleFavoriteCls(book)"></i>
-              收藏
-            </div>
-            <div class="borrow" @click="borrow" :class="(data.user&&data.user.length)||(data.library&&data.library.length)?'':'not'">立即借阅</div>
-          </footer>
-        </section>
-        <section class="comment" v-show="currentIndex==1">
-          <Scroll class="comment-content" :data="data.review" ref="comments">
-            <ul class="comment-lists">
-              <li class="item" v-for="(v,i) in data.review" :key="i">
-                <div class="item-left">
-                  <img v-lazy="v.user.avatar">
-                </div>
-                <div class="item-right">
-                  <h3 v-html="v.user.nickname"></h3>
-                  <p v-html="v.content"></p>
-                  <h5 v-html="v.time"></h5>
-                </div>
-              </li>
-            </ul>
-          </Scroll>
-          <footer>
-            <input type="text" class="text" placeholder="我也来说两句" ref="text" v-model="content">
-            <div class="btn s" @click="sub">提交</div>
-          </footer>
-        </section>
-        <Confirm :head="head" ref="confirm" @confirm="toOrder">
-          <template>
-            <Scroll :scrollX="scrollX" :scrollY="scrollY" :data="data.user" class="user-content" v-show="data.user">
-              <ul class="user-lists" ref="userLists">
-                <li v-for="(v,i) in data.user" :key="v.origin_id" @click="oid=v.origin_id">
-                  <div class="img">
+    <main class="new-book">
+      <div class="book-detail" v-show="haveBook">
+        <header>
+          <img v-lazy="data.images_large">
+          <article>
+            <h2 v-html="data.title"></h2>
+            <h3 v-html="data.author"></h3>
+            <h4>出版社: {{data.publisher}}</h4>
+            <h4>出版时间: {{data.pubdate}}</h4>
+            <h4>ISBN: {{data.isbn}}</h4>
+            <p><span>荐</span></p>
+          </article>
+        </header>
+        <Switches :switches="switches" :currentIndex="currentIndex" @switch="switchItem"></Switches>
+        <template>
+          <section class="detail" v-show="currentIndex==0">
+            <Scroll class="detail-content" :data="[data.summary]">
+              <p v-html="data.summary"></p>
+            </Scroll>
+            <footer>
+              <div class="cancel" @click="cancel">取消</div>
+              <div class="sup" @click="sup" v-if="data.action=='up'">上架图书</div>
+              <div class="sub" @click="sub" v-else-if="data.action=='down'">下架图书</div>
+            </footer>
+          </section>
+          <section class="comment" v-show="currentIndex==1">
+            <Scroll class="comment-content" :data="data.review" ref="comments">
+              <ul class="comment-lists">
+                <li class="item" v-for="(v,i) in data.review" :key="i">
+                  <div class="item-left">
                     <img v-lazy="v.user.avatar">
-                    <i :class="oid==v.origin_id?'select':'default'"></i>
                   </div>
-                  <h5 v-html="v.user.nickname"></h5>
+                  <div class="item-right">
+                    <h3 v-html="v.user.nickname"></h3>
+                    <p v-html="v.content"></p>
+                    <h5 v-html="v.time"></h5>
+                  </div>
                 </li>
               </ul>
             </Scroll>
-          </template>
-        </Confirm>
-      </template>
-    </div>
+            <footer>
+              <input type="text" class="text" placeholder="我也来说两句" ref="text" v-model="content">
+              <div class="btn s" @click="submit">提交</div>
+            </footer>
+          </section>
+        </template>
+      </div>
+      <div class="no-result-wrapper" v-show="!haveBook">
+        <NoResult :title="title"></NoResult>
+      </div>
+    </main>
   </transition>
 </template>
 
 <script>
-  import {mapActions, mapGetters, mapMutations} from 'vuex'
   import Switches from 'base/switches'
   import Scroll from 'base/scroll'
+  import NoResult from 'base/noResult'
+
   export default {
-    name: "book-detail",
-    components: {Switches, Scroll},
+    name: "new-book",
+    components: {Switches, Scroll, NoResult},
     data() {
       return {
+        haveBook: false,
+        title: '抱歉，暂时没有这本书的数据',
         switches: [{name: '内容详情'}, {name: '书籍评论'}],
-        content:'',
+        content: '',
         currentIndex: 0,
-        data: {},
-        head: '请选择书籍拥有者',
-        scrollX:true,
-        scrollY:false,
-        oid: 0
+        data: {
+          review:[]
+        },
       }
     },
-    computed: {
-      ...mapGetters([
-        'showDetail',
-        'book',
-        'favoriteList'
-      ])
-    },
     methods: {
-      ...mapActions(['saveFavoriteList', 'delFavoriteList']),
-      toggleFavoriteCls(book) {
-        if (this._isFavorite(book)) {
-          this.delFavoriteList(book)
-        } else {
-          this.saveFavoriteList(book)
-        }
+      cancel(){
+        this.$router.back()
       },
-      getFavoriteCls(book) {
-        if (this._isFavorite(book)) {
-          return 'icon-tabbar_icon_collect_selected'
-        } else {
-          return 'icon-tabbar_icon_collect_default'
-        }
+      sup() {
+        this.$http.post('/book/share-store',{book_id:this.data.id}).then(r=>{
+          if(r.status=='success'){
+            alert('上架成功')
+          }else{
+            this.$router.push({name:'/'})
+          }
+        }).catch(e=>console.log(e))
       },
-      _isFavorite(book) {
-        let index = this.favoriteList.findIndex((item) => {
-          return book.id === item.id
-        })
-        return index > -1
+      sub() {
+        this.$http.post('/book/share-update',{id:this.data.userbook.id,action:'NORMAL'}).then(r=>{
+          if(r.status=='success'){
+            alert('下架成功')
+          }else{
+            this.$router.push({name:'/'})
+          }
+        }).catch(e=>console.log(e))
       },
       switchItem(index) {
         this.currentIndex = index
-        if(index==1){
-          this.$refs.comments.scrollTo(0,0)
+        if (index == 1) {
+          this.$refs.comments.scrollTo(0, 0)
         }
       },
-      borrow() {
-        if(this.data.user.length){
-          this.$refs.userLists.style.width = 168 * this.data.user.length / 7.5 + 'vw'
-          this.$refs.confirm.show()
-        }else if(this.data.library.length){
-          let id=this.data.library[0].origin_id
-          this.$http.post('/bill/library-store',{library_book_ids:[id]}).then(r=>{
-            if(r.status=='success'){
-              this.$router.push({path: '/proof',query:{id:r.data.id}})
-            }
-          })
-        }
-      },
-      toOrder() {
-        this.$http.post('/bill/share-store',{user_book_id:this.oid}).then(r=>{
-          if(r.status=='success'){
-            this.$router.push({path: ' /order',query:{id:r.data.id}})
-          }
-        })
-      },
-      sub() {
-        this.$http.post('/book/comment',{
-          book_id:this.book.id,
-          content:this.content
-        }).then(r=>{
-          if(r.status=='success'){
-            let data=r.data.review
+      submit() {
+        this.$http.post('/book/comment', {
+          book_id: this.data.id,
+          content: this.content
+        }).then(r => {
+          if (r.status == 'success') {
+            let data = r.data.review
             this.data.review.unshift({
-              content:data.content,
-              time:data.time,
-              user:{
-                avatar:data.user.avatar,
-                nickname:data.user.nickname}})
-            this.content=''
-            this.$refs.comments.scrollTo(0,0)
+              content: data.content,
+              time: data.time,
+              user: {
+                avatar: data.user.avatar,
+                nickname: data.user.nickname
+              }
+            })
+            this.content = ''
+            this.$refs.comments.scrollTo(0, 0)
           }
         });
         this.$refs.text.blur()
       }
     },
-    mounted() {
-      this.$http.get('/book/show', {
+    activated() {
+      let isbn = window.location.hash.split('=')[1];
+      this.$http.get('/third/isbn', {
         params: {
-          id: this.book.id,
-          origin: this.book.origin
+          isbn: isbn
         }
       }).then(r => {
         if (r.status == 'success') {
-          this.data = r.data.books
+          this.haveBook=true
+          this.data = r.data.book
         }
-
       }).catch(e => console.log(e))
     }
   }
@@ -181,7 +144,7 @@
   @import "common/scss/const.scss";
   @import "common/scss/mymixin.scss";
 
-  .book-detail {
+  .new-book {
     position: fixed;
     top: 0;
     left: 0;
@@ -189,6 +152,11 @@
     bottom: 0;
     z-index: 4;
     background: $color-background;
+  }
+
+  .book-detail {
+    width: 100%;
+    height: 100%;
     header {
       height: 318px;
       margin-bottom: 18px;
@@ -262,37 +230,24 @@
         }
       }
       footer {
-        .mark {
+        line-height: 98px;
+        font-size: $font-size-large-x;
+        .cancel {
           width: 250px;
-          @extend %between;
-          flex-direction: column;
-          padding: 10px 0;
-          box-sizing: border-box;
-          font-size: $font-size-small-x;
           background: #fff;
           color: $color-theme;
-          i {
-            font-size: 48px;
-          }
+
         }
-        .borrow {
+        .sup,.sub {
           width: 500px;
-          line-height: 98px;
-          box-sizing: border-box;
           background: $color-theme;
-          font-size: $font-size-large-x;
           color: $color-text-ll;
-          &.not{
-            background: $color-background-d;
-            color: $color-text;
-            border: 1px solid $color-border;
-          }
         }
       }
     }
     .comment {
       position: relative;
-      &-content{
+      &-content {
         width: 100%;
         position: absolute;
         top: 0;
@@ -408,6 +363,10 @@
     }
   }
 
+  .no-result-wrapper {
+    @extend %middle
+  }
+
   .slide-enter-active, .slide-leave-active {
     transition: all .5s ease;
   }
@@ -417,3 +376,4 @@
     transform: translate3d(100%, 0, 0);
   }
 </style>
+

@@ -12,7 +12,10 @@ import Create from 'components/create'
 import Shelf from 'components/shelf'
 import BookDetail from 'components/bookDetail'
 import Order from 'components/order'
+import Proof from 'components/proof'
 import OrderList from 'components/orderList'
+import NewBook from 'components/newBook'
+import MyBook from 'components/MyBook'
 Vue.use(Router)
 
 export default new Router({
@@ -93,9 +96,24 @@ export default new Router({
       component:Order
     },
     {
+      path:'/proof',
+      name:'proof',
+      component:Proof
+    },
+    {
       path:'/orderList',
       name:'orderList',
       component:OrderList,
+    },
+    {
+      path:'/newBook',
+      name:'newBook',
+      component:NewBook,
+    },
+    {
+      path:'/myBook',
+      name:'myBook',
+      component:MyBook,
     }
   ]
 })

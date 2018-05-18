@@ -22,8 +22,8 @@
         default: []
       }
     },
-    methods:{
-      selectItem(item){
+    methods: {
+      selectItem(item) {
         this.$emit('select', item)
       }
     }
@@ -33,7 +33,8 @@
 <style scoped lang="scss">
   @import "common/scss/const.scss";
   @import "common/scss/mymixin.scss";
-  .book-list .item{
+
+  .book-list .item {
     margin: 20px 0;
     padding: 12px 24px;
     height: 240px;
@@ -79,7 +80,7 @@
       p {
         text-align: left;
         font-size: $font-size-medium;
-        @include no-wrap-multi(2)
+        @include no-wrap-multi(2);
       }
     }
   }

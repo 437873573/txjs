@@ -6,7 +6,7 @@
           <header>{{head}}</header>
           <slot></slot>
           <div class="operate">
-            <div v-show="canshow" @click="cancel" class="operate-btn left">{{ cancelBtnText }}</div>
+            <div v-show="canShow" @click="cancel" class="operate-btn left">{{ cancelBtnText }}</div>
             <div @click="confirm" class="operate-btn">{{ confirmBtnText }}</div>
           </div>
         </div>
@@ -25,8 +25,7 @@
       }
     },
     props: {
-      // 描述性文字
-      canshow: {
+      canShow: {
         type: Boolean,
         default: true
       },

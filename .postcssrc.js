@@ -2,7 +2,7 @@
 
 module.exports = {
   "plugins": {
-    "autoprefixer":{},
+    "postcss-cssnext": {},
     "postcss-import": {},
     "postcss-url": {},
     "postcss-aspect-ratio-mini": {},
@@ -17,12 +17,6 @@ module.exports = {
       mediaQuery: true
     },
     "postcss-viewport-units": {},
-    "cssnano": {
-      preset: "advanced",
-      autoprefixer: false,
-      "postcss-zindex": false
-    }
-
-
+    "cssnano": { preset: "advanced", autoprefixer: false, "postcss-zindex": false }
   }
 }

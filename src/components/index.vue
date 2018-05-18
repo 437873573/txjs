@@ -2,7 +2,7 @@
   <main class="index">
     <transition name="fade">
       <div class="searchMinBox" v-show="searchMin">
-        <i class="icon-nav_icon_scan"></i>
+        <i class="icon-nav_icon_scan" @click="scan"></i>
         <div class="searchMin"><i class="icon-btn_icon_search"></i>&nbsp;&nbsp;在这里搜你想要的书籍</div>
         <i class="icon-nav_icon_news"></i>
       </div>
@@ -15,7 +15,7 @@
             @scroll="scroll">
       <div>
         <section class="slider-wrapper" v-if="banners.length">
-          <div class="scan"><i class="icon-nav_icon_scan"></i></div>
+          <div class="scan"><i class="icon-nav_icon_scan" @click="scan"></i></div>
           <div class="news"><i class="icon-nav_icon_news"></i></div>
           <Slider>
             <div v-for="banner in banners">
@@ -27,7 +27,7 @@
           <div class="search" ref="search"><i class="icon-btn_icon_search"></i>&nbsp;&nbsp;在这里搜你想要的书籍</div>
         </div>
         <nav>
-          <div><img src="../common/img/home_icon_personal.png" alt=""><span>我的图书</span></div>
+          <router-link tag="div" :to="{path:'/myBook'}"><img src="../common/img/home_icon_personal.png" alt=""><span>我的图书</span></router-link>
           <router-link tag="div" :to="{path:'/orderList'}"><img src="../common/img/home_icon_borrow.png" alt=""><span>借阅管理</span>
           </router-link>
           <div><img src="../common/img/home_icon_find.png" alt=""><span>发现更多</span></div>
@@ -53,9 +53,11 @@
   import Loading from 'base/loading'
   import BookList from 'base/bookList'
   import {mapActions} from 'vuex'
+  import {scan} from "common/js/scanCode";
 
   export default {
     name: "index",
+    mixins:[scan],
     components: {
       Slider,
       Scroll,
