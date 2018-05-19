@@ -117,7 +117,7 @@
         this.$http.get('/book').then(r => {
           // console.log(r)
           if (r.status == 'success') {
-            this.lists = r.data.books.user_books.data
+            this.lists = r.data.books.data
           }
         })
       }, 1000)
