@@ -6,7 +6,7 @@ import {localSave, localDel, localClear, saveFavorite, delFavorite} from 'common
 
 //选择书籍展示详情
 export const selectBook = function ({commit}, {book}) {
-  commit(types.SET_SHOWDETAIL,true)
+  commit(types.SET_SHOWDETAIL,true);
   commit(types.SET_BOOK,book)
 }
 /**

@@ -5,8 +5,8 @@
         <img v-lazy="item.images_large" alt="">
       </div>
       <div class="text">
-        <h3>{{item.title}}</h3>
-        <h4>{{item.author}} <span>校长推荐</span></h4>
+        <h4>{{item.title}}</h4>
+        <h5>{{item.author}}</h5>
         <p v-html="item.summary"></p>
       </div>
     </li>
@@ -44,28 +44,33 @@
     align-items: stretch;
     .img {
       margin-right: 26px;
-      img {
-        flex: none;
-        width: 160px;
-        height: 100%;
-      }
+      width: 160px;
+      height: 100%;
+      flex: none;
     }
     .text {
+      flex: none;
+      width: 516px;
       @extend %around;
       padding: 10px 0;
       box-sizing: border-box;
       align-items: flex-start;
       flex-direction: column;
-      h3 {
+      text-align: left;
+      h4 {
+        width: 100%;
+        flex: none;
         font-size: $font-size-large-x;
         color: $color-text-d;
         font-weight: bold;
         @include no-wrap;
       }
-      h4 {
+      h5 {
+        max-width: 360px;
         color: $color-text-l;
         font-size: $font-size-medium;
         @extend %start;
+        @include no-wrap;
         span {
           flex: none;
           display: block;
@@ -78,7 +83,9 @@
         }
       }
       p {
-        text-align: left;
+        align-self: stretch;
+        height: 68px;
+        flex: none;
         font-size: $font-size-medium;
         @include no-wrap-multi(2);
       }

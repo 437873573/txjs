@@ -78,11 +78,9 @@
     align-items: stretch;
     .img {
       margin-right: 26px;
-      img {
-        flex: none;
-        width: 160px;
-        height: 100%;
-      }
+      flex: none;
+      width: 160px;
+      height: 100%;
     }
     .text {
       @extend %around;

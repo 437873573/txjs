@@ -1,6 +1,8 @@
 <template>
   <main class="mall">
-    <img src="../common/img/mall_selected.png" alt="">
+    <div class="img">
+      <img src="../common/img/mall_selected.png" alt="">
+    </div>
   </main>
 
 </template>
@@ -21,7 +23,7 @@
   top: 0;
   bottom: 98px;
 }
-  img {
+  .img {
     @extend %middleCenter;
     width: 548px;
     height: 359px;

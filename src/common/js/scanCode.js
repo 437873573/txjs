@@ -26,7 +26,7 @@ export const scan = {
           scanType: ["barCode"],
           success: function (res) {
             let result = res.resultStr.split(',')[1];
-            window.location.href=url+'#/newBook?isbn='+result
+            window.location.replace=url+'#/newBook?isbn='+result+'&r='+Math.random()
           }
         });
       });

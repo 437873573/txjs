@@ -2,19 +2,19 @@
   <header class="my-tab">
     <router-link tag="div" class="tab-item" :to="{ name: 'index' }" @click.native="index=1">
       <i :class="index==1?'icon-tabbar_icon_home_selected':'icon-tabbar_icon_home_default'"></i>
-      <span class="tab-link">首页</span>
+      <h3 class="tab-link">首页</h3>
     </router-link>
-    <router-link tag="div" class="tab-item" :to="{ name: 'library' }" @click.native="index=2">
+    <router-link tag="div" class="tab-item" :to="{ name: 'share' }" @click.native="index=2">
       <i :class="index==2?'icon-tabbar_icon_library_selected':'icon-tabbar_icon_library_default'"></i>
-      <span class="tab-link">图书馆</span>
+      <h3 class="tab-link">共享</h3>
     </router-link>
     <router-link tag="div" class="tab-item" :to="{ name: 'mall' }" @click.native="index=3">
       <i :class="index==3?'icon-tabbar_icon_mall_selected':'icon-tabbar_icon_mall_default'"></i>
-      <span class="tab-link">商城</span>
+      <h3 class="tab-link">商城</h3>
     </router-link>
     <router-link tag="div" class="tab-item" :to="{ name: 'user' }" @click.native="index=4">
       <i :class="index==4?'icon-tabbar_icon_personal_selected':'icon-tabbar_icon_personal_default'"></i>
-      <span class="tab-link">我的</span>
+      <h3 class="tab-link">我的</h3>
     </router-link>
   </header>
 </template>
@@ -69,7 +69,7 @@
       align-items: center;
       color: $color-text;
       i {
-        font-size: 48px;
+        font-size: 44px;
       }
       &.router-link-active {
         .tab-link {

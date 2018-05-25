@@ -27,11 +27,10 @@
           <div class="search" ref="search"><i class="icon-btn_icon_search"></i>&nbsp;&nbsp;在这里搜你想要的书籍</div>
         </div>
         <nav>
-          <router-link tag="div" :to="{path:'/myBook'}"><img src="../common/img/home_icon_personal.png" alt=""><span>我的图书</span></router-link>
-          <router-link tag="div" :to="{path:'/orderList'}"><img src="../common/img/home_icon_borrow.png" alt=""><span>借阅管理</span>
-          </router-link>
-          <div><img src="../common/img/home_icon_find.png" alt=""><span>发现更多</span></div>
-          <div><img src="../common/img/home_icon_sign.png" alt=""><span>每日签到</span></div>
+          <router-link tag="div" :to="{path:'/myBook'}"><div class="img"><img src="../common/img/home_icon_personal.png" alt=""></div><span>我的图书</span></router-link>
+          <router-link tag="div" :to="{path:'/orderList'}"><div class="img"><img src="../common/img/home_icon_star.png" alt=""></div><span>测试</span></router-link>
+          <div><div class="img"><img src="../common/img/home_icon_find.png" alt=""></div><span>发现更多</span></div>
+          <div><div class="img"><img src="../common/img/home_icon_sign.png" alt=""></div><span>每日签到</span></div>
         </nav>
         <!-- 图书推荐列表 -->
         <div class="recommend-list">
@@ -104,7 +103,7 @@
       this.probeType = 3;
       this.listenScroll = true
     },
-    created() {
+    activated() {
       //获取轮播图
       this.$http.get('/banner').then(r => {
         // console.log(r)
@@ -139,7 +138,7 @@
 
   .searchMinBox {
     position: absolute;
-    z-index: 998;
+    z-index: 3;
     width: 100%;
     height: 88px;
     background: #fff;
@@ -152,13 +151,20 @@
       height: 100%;
       border-radius: 10px;
       font-size: $font-size-medium;
-      line-height: 64px;
       text-align: left;
-      background: $color-background-d;
+      background: $color-background;
+      @extend %start;
       i {
-        color: $color-text-d;
+        color: $color-text-l;
+        font-size: 36px;
         margin-left: 24px;
       }
+    }
+    >i:first-of-type{
+      font-size: 36px;
+    }
+    >i:last-of-type{
+      font-size: 40px;
     }
   }
 
@@ -174,8 +180,8 @@
     .scan, .news {
       position: absolute;
       top: 24px;
-      width: 68px;
-      height: 68px;
+      width: 66px;
+      height: 66px;
       background: rgba(0, 0, 0, 0.5);
       border-radius: 50%;
       font-size: 40px;
@@ -186,6 +192,7 @@
       justify-content: center;
     }
     .scan {
+      font-size: 36px;
       left: 24px;
     }
     .news {
@@ -205,11 +212,13 @@
       height: 64px;
       border-radius: 100px;
       font-size: $font-size-medium;
-      line-height: 66px;
       background: $color-background-h;
       box-shadow: 0 10px 18px rgba(0, 0, 0, 0.1);
+      @extend %center;
       i {
-        color: $color-text-d;
+        margin-left: -36px;
+        color: $color-text-l;
+        font-size: 36px;
       }
     }
   }
@@ -221,11 +230,11 @@
     height: 160px;
     box-sizing: border-box;
     background: $color-background-h;
-    div {
+    >div {
       flex: 1;
       @extend %between;
       flex-direction: column;
-      img {
+      .img {
         width: 68px;
         height: 68px;
       }

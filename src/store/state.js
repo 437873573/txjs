@@ -5,6 +5,8 @@
 import { getStorage, getFavorite } from 'common/js/store.js'
 
 const state = {
+  //用户信息
+  user:{},
   //书本信息
   book:{},
   //书籍详情页显示状态

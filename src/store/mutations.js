@@ -3,6 +3,9 @@
 import * as types from './mutations-type.js'
 
 const mutations = {
+  [types.SET_USER](state, user) {
+    state.user = user
+  },
   [types.SET_BOOK](state, book) {
     state.book = book
   },

@@ -2,12 +2,14 @@
   <main class="bind">
     <section class="status">
       <div class="status-left">手机验证</div>
-      <div class="status-right" :class="status?'':'no'">添加班级</div>
+      <div class="status-right" :class="flag?'':'no'">添加班级</div>
     </section>
     <keep-alive>
-      <router-view @next="next" @show="show"></router-view>
+      <router-view @next="next" @show="show" @status="status"></router-view>
     </keep-alive>
-    <Confirm ref="confirm" :text="message" :confirmBtnText="text" :canshow="false" :head="head"></Confirm>
+    <Confirm ref="confirm" :confirmBtnText="text" :canShow="false" :head="head">
+      <div id="text" v-html="message"></div>
+    </Confirm>
   </main>
 </template>
 
@@ -16,31 +18,35 @@
     name: "bind",
     data(){
       return{
-        status:false,
+        flag:false,
         head:'填写有以下错误',
-        message:'666',
+        message:'',
         text:'确定'
       }
     },
     methods:{
+      status(flag){
+        this.flag=flag
+      },
       next(){
-        this.status=true,
+        this.flag=true;
         this.$router.push({name:'info'})
       },
       show(mess){
-        this.message=mess
+        this.message=mess;
         this.$refs.confirm.show()
       }
     },
-    activated(){
-      this.status=this.$route.query.status
-    }
   }
 </script>
 
 <style scoped lang="scss">
   @import "common/scss/const.scss";
   @import "common/scss/mymixin.scss";
+  .bind{
+    @extend %cover;
+    z-index: 3;
+  }
   .status {
     padding-top: 60px;
     @extend %between;
@@ -71,4 +77,10 @@
       }
     }
   }
+  #text {
+     padding: 20px 40px 40px;
+     text-align: left;
+     font-size: $font-size-medium-x;
+     color: $color-text-l;
+   }
 </style>

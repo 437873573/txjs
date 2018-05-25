@@ -1,4 +1,7 @@
 // 映射及计算
+
+export const user = state => state.user
+
 export const book = state => state.book
 
 export const showDetail=state=>state.showDetail

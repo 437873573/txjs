@@ -10,15 +10,18 @@ import router from './router'
 import App from './App'
 
 import components from './plugins/components'
-Vue.use(components)
+Vue.use(components);
 
 import axios from './plugins/http'
-Vue.use(axios)
+Vue.use(axios);
 
 Fastclick.attach(document.body);
+
 Vue.use(VueLazyLoad, {
-  loading: require('common/img/lazy.png')
-})
+  loading: require('common/img/lazy.png'),
+  error: require('common/img/error.png')
+});
+
 Vue.config.productionTip = false;
 
 if (weixin.isweixin()) {
@@ -33,4 +36,4 @@ new Vue({
   store,
   components: { App },
   template: '<App/>'
-})
+});

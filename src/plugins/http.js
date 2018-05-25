@@ -4,7 +4,7 @@ import qs from 'qs'
 let http = axios.create({});
 
 if (process.env.NODE_ENV == 'development') {
-  http.defaults.baseURL = 'http://txjs-wechat-hnw.mion.cn/api';
+  http.defaults.baseURL = 'http://txjs-api-hnw.mion.cn/api';
 
 } else if (process.env.NODE_ENV == 'production') {
   http.defaults.baseURL = '/api';
@@ -36,14 +36,18 @@ http.interceptors.response.use(
         return data;
         break;
       case 'fail':
-        let mess='';
-        for(var k in data.data){
-          data.data[k].forEach((v,i)=>{
-            mess+=`<p>`+v+`</p>`
+        let mess = '';
+        for (var k in data.data) {
+          data.data[k].forEach((v, i) => {
+            mess += `<p>` + v + `</p>`
           })
         }
-        data.mess=mess
-        return data
+        data.mess = mess;
+        return data;
+        break;
+      case 'error':
+        data.mess=data.message;
+        return data;
     }
     // 若不是正确的返回code，且已经登录，就抛出错误
     const err = new Error(data.description)
@@ -53,10 +57,7 @@ http.interceptors.response.use(
 
     throw err
   }, function (err) { // 这里是返回状态码不为200时候的错误处理
-    console.log(err)
-    if (error.response === 401) {
-      console.log(2)
-    }
+
     if (err && err.response) {
 
       switch (err.response.status) {
@@ -66,6 +67,8 @@ http.interceptors.response.use(
 
         case 401:
           err.message = '未授权，请登录';
+          window.localStorage.clear();
+          window.location.reload();
           break;
 
         case 403:

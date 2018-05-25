@@ -111,12 +111,6 @@
           color: $color-text-d;
           font-size: $font-size-large-x;
         }
-        .text {
-          padding: 20px 40px 40px;
-          text-align: left;
-          font-size: $font-size-medium-x;
-          color: $color-text-l;
-        }
         .operate {
           display: flex;
           align-items: center;

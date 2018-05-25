@@ -1,7 +1,9 @@
 <template>
   <main class="order">
     <header>
-      <img v-lazy="data.book.images_large">
+      <div class="img">
+        <img v-lazy="data.book.images_large">
+      </div>
       <article>
         <h2 v-html="data.book.title"></h2>
         <h3 v-html="data.book.author"></h3>
@@ -103,7 +105,7 @@
       background: $color-background-h;
       @extend %start;
       align-items: stretch;
-      img {
+      .img {
         flex: none;
         height: 100%;
         width: 200px;

@@ -1,7 +1,9 @@
 <template>
   <div class="loading-container">
-    <div class="my-loading">
-      <img src="../common/img/loading.gif">
+    <div class="loading">
+      <div class="img">
+        <img src="../common/img/loading.gif">
+      </div>
       <p class="desc">{{ title }}</p>
     </div>
   </div>
@@ -25,10 +27,10 @@
   .loading-container{
     @extend %middle
   }
-  .my-loading {
+  .loading {
     width: 100%;
     text-align: center;
-    img{
+    .img{
       display: inline-block;
       width: 24px;
       height: 24px;

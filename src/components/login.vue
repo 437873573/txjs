@@ -41,7 +41,11 @@
       getCode() {
         if (this.phone) {
           this.$http.post('/captcha-sms', {mobile: this.phone}).then(r => {
-            this._countdown()
+            if(r.status=='success'){
+              this._countdown()
+            }else{
+              this.$emit('show', r.mess)
+            }
           }).catch(e => console.log(e))
         } else {
           this.$emit('show', '手机号码不能为空')

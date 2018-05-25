@@ -1,5 +1,5 @@
 <template>
-  <main class="library">
+  <main class="share">
     <div class="tab">
       <i class="icon-btn_icon_search"></i>
       <h2>龙口西小学图书馆</h2>
@@ -8,7 +8,9 @@
     <Scroll :data="lists" class="library-content">
       <ul class="library-lists">
         <li v-for="v in lists" :key="v.id" @click="selectItem(v)">
-          <img v-lazy="v.image" alt="">
+          <div class="img">
+            <img v-lazy="v.image" alt="">
+          </div>
           <h3>{{v.name}}</h3>
           <h5>共{{v.count}}本</h5>
         </li>
@@ -23,7 +25,7 @@
   import {mapMutations} from 'vuex'
 
   export default {
-    name: "library",
+    name: "share",
     components: {Scroll},
     data() {
       return {
@@ -94,7 +96,7 @@
       box-sizing: border-box;
       @extend %start;
       flex-direction: column;
-      img {
+      .img {
         width: 172px;
         height: 170px;
         margin-left: 7px;

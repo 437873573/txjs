@@ -91,5 +91,9 @@ module.exports = {
       jQuery: "jquery",
       $: "jquery"
     })
-  ]
+  ],
+
+  devServer: {
+    disableHostCheck: true,
+  }
 }

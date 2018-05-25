@@ -1,6 +1,8 @@
 <template>
-  <div class="my-no-result">
-    <img src="../common/img/noResult.png">
+  <div class="no-result">
+    <div class="img">
+      <img src="../common/img/noResult.png">
+    </div>
     <p class="no-result-text">{{ title }}</p>
   </div>
 </template>
@@ -19,12 +21,12 @@
 
 <style scoped lang="scss">
   @import 'common/scss/const.scss';
-  .my-no-sesult {
+  .no-result {
     text-align: center;
-    img{
+    .img{
       display: inline-block;
-      width: 80px;
-      height: 72.5px;
+      width: 160px;
+      height: 145px;
     }
     .no-result-text {
       margin-top: 30px;

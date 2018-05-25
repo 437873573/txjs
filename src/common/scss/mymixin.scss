@@ -49,6 +49,9 @@
   line-height: 88px;
   width: 160px;
   border-radius: 10px;
+  &:active{
+
+  }
   &.x {
     width: 580px;
     font-size: $font-size-medium-x;
@@ -98,6 +101,7 @@
   left: 0;
   right: 0;
   bottom: 0;
+  background: $color-background;
 }
 
 //垂直居中
@@ -119,5 +123,16 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+
+//二级页面进入效果
+.slide-enter-active, .slide-leave-active {
+  transition: all .5s ease;
+}
+
+.slide-enter, .slide-leave-to {
+  opacity: 0;
+  transform: translate3d(100%, 0, 0);
 }
 

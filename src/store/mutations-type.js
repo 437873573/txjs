@@ -1,6 +1,8 @@
+export const SET_USER = 'SET_USER'
+
 export const SET_BOOK = 'SET_BOOK'
 
-export const SET_SHOWDETAIL='SET_SHOWDETAIL'
+export const SET_SHOWDETAIL = 'SET_SHOWDETAIL'
 
 export const SET_SHELF = 'SET_SHELF'
 

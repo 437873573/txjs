@@ -118,6 +118,7 @@
         this.checkRegion = it;
         this.CheckArea.region = name;
         this.CheckArea.regionId = id;
+        this.select()
       }
     },
     created: function () {
