@@ -8,55 +8,55 @@
         <h2 v-html="user.realname"></h2>
       </router-link>
       <div class="info">
-        <div class="coin">
+        <router-link tag="div" class="coin" :to="{path:'/user/userCoin'}">
           <h5 v-html="user.coin"></h5>
           <h4>借书豆</h4>
-        </div>
+        </router-link>
         <div class="line"></div>
-        <div class="credit">
+        <router-link tag="div" class="credit" :to="{path:'/user/userCredit'}">
           <h5 v-html="user.credit"></h5>
-          <h4>个人信用</h4>
-        </div>
+          <h4>信用值</h4>
+        </router-link>
       </div>
     </header>
     <nav>
       <ul class="nav">
-        <li class="nli">
-          <div class="img">
-            <img src="../common/img/personal_icon_dd_sm.png" alt="">
-          </div>
-          <h3>我的订单</h3>
-        </li>
-        <li class="nli">
+        <!--<li class="nli">-->
+          <!--<div class="img">-->
+            <!--<img src="../common/img/personal_icon_dd_sm.png" alt="">-->
+          <!--</div>-->
+          <!--<h3>我的订单</h3>-->
+        <!--</li>-->
+        <router-link tag="li" class="nli" :to="{path:'/user/userBook'}">
           <div class="img">
             <img src="../common/img/home_icon_personal_sm.png" alt="">
           </div>
           <h3>我的图书</h3>
-        </li>
-        <li class="nli">
-          <div class="img">
-            <img src="../common/img/nav_icon_news_sm.png" alt="">
-          </div>
-          <h3>我的消息</h3>
-        </li>
-        <li class="nli">
-          <div class="img">
-            <img src="../common/img/personal_icon_sc_sm.png" alt="">
-          </div>
-          <h3>我的收藏</h3>
-        </li>
-        <li class="nli">
-          <div class="img">
-            <img src="../common/img/nav_icon_class.png" alt="">
-          </div>
-          <h3>班级借阅</h3>
-        </li>
-        <li class="nli">
+        </router-link>
+        <router-link tag="li" class="nli" :to="{path:'/user/userProof'}">
           <div class="img">
             <img src="../common/img/nav_icon_library.png" alt="">
           </div>
-          <h3>学校借阅</h3>
-        </li>
+          <h3>图书馆书单</h3>
+        </router-link>
+        <!--<router-link tag="li" class="nli" :to="{path:'/user/userMess'}">-->
+          <!--<div class="img">-->
+            <!--<img src="../common/img/nav_icon_news_sm.png" alt="">-->
+          <!--</div>-->
+          <!--<h3>我的消息</h3>-->
+        <!--</router-link>-->
+        <!--<router-link tag="li" class="nli" :to="{path:'/user/userCollect'}">-->
+          <!--<div class="img">-->
+            <!--<img src="../common/img/personal_icon_sc_sm.png" alt="">-->
+          <!--</div>-->
+          <!--<h3>我的收藏</h3>-->
+        <!--</router-link>-->
+        <!--<li class="nli">-->
+          <!--<div class="img">-->
+            <!--<img src="../common/img/nav_icon_library.png" alt="">-->
+          <!--</div>-->
+          <!--<h3>学校借阅</h3>-->
+        <!--</li>-->
       </ul>
     </nav>
     <router-view></router-view>
@@ -140,6 +140,9 @@
     padding: 0 24px;
     box-sizing: border-box;
     background: $color-background-h;
+    &:last-of-type{
+      border-bottom: none;
+    }
     @extend %start;
     .img{
       width: 36px;

@@ -9,10 +9,12 @@
 
 <script>
   import Tab from 'components/tab'
+  import {share} from 'common/js/share'
 
   export default {
     name: 'App',
     components: {Tab},
+    mixins: [share],
     data() {
       return {
         index: 0,
@@ -33,27 +35,26 @@
         }
       }
     },
-    updated() {
+    updated(){
       this.hash()
     },
-    mounted(){
+    mounted() {
       this.$http.get('/profile').then(
         r => {
           let bound = r.data.bound
           if ((bound & 1) == 0) {
-          this.$router.push({name: 'login'})
+            this.$router.push({name: 'login'})
           } else if ((bound & 2) == 0) {
             this.$router.push({name: 'info'})
           } else {
-            this.$store.commit('SET_USER',r.data.user)
+            this.$store.commit('SET_USER', r.data.user)
+            window.link = 'http://txjs-wechat-hnw.mion.cn?user_id=' + r.data.user.id
             this.hash()
           }
         }
-      ).catch(err => console.log(err))
+      ).catch(err => console.log(err));
+      this.share()
     },
-    activated() {
-      this.hash()
-    }
   }
 </script>
 

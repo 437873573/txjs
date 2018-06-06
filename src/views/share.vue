@@ -1,55 +1,89 @@
 <template>
   <main class="share">
-    <div class="tab">
-      <i class="icon-btn_icon_search"></i>
-      <h2>龙口西小学图书馆</h2>
-      <i class="icon-nav_icon_news"></i>
-    </div>
-    <Scroll :data="lists" class="library-content">
-      <ul class="library-lists">
-        <li v-for="v in lists" :key="v.id" @click="selectItem(v)">
-          <div class="img">
-            <img v-lazy="v.image" alt="">
-          </div>
-          <h3>{{v.name}}</h3>
-          <h5>共{{v.count}}本</h5>
-        </li>
-      </ul>
-    </Scroll>
+    <Switches :switches="switches" :currentIndex="currentIndex" @switch="selectItem"></Switches>
+    <ClassmateList class="share-content" v-show="currentIndex==0" :classmate="classLists"></ClassmateList>
+    <LibraryBookList class="share-content" v-show="currentIndex==1" :lists="libraryLists"></LibraryBookList>
     <router-view></router-view>
   </main>
 </template>
 
 <script>
-  import Scroll from 'base/scroll'
-  import {mapMutations} from 'vuex'
+  import Switches from 'base/switches'
+  import ClassmateList from 'components/classmateList'
+  import LibraryBookList from 'components/libraryBookList'
 
   export default {
     name: "share",
-    components: {Scroll},
+    components: {Switches, ClassmateList, LibraryBookList},
     data() {
       return {
-        lists: []
+        switches: [{name: '本班级'}, {name: '图书馆'}],
+        currentIndex: 0,
+        libraryLists: [],
+        classLists: []
       }
     },
     methods: {
-      selectItem(item) {
-        this.$router.push({
-          path: `/library/shelf`
-        });
-        this.setShelf(item)
+      selectItem(index) {
+        this.currentIndex = index
       },
-      ...mapMutations({
-        'setShelf': 'SET_SHELF'
-      })
-    },
-    created() {
-      this.$http.get('/school/shelf-index').then(r => {
-        // console.log(r)
-        if (r.status == 'success') {
-          this.lists = r.data.shelves
+      // 重组 res.data.list 数据
+      _formatClassmate(list) {
+        let map={};
+        // 填充歌手数据
+        list.forEach((item, index) => {
+          // 填充 a-z 字母
+          let key = item.initial;
+          if (!map[key]) {
+            map[key] = {
+              title: key,
+              items: []
+            }
+          }
+
+          // 填充对应字母歌手数据
+          map[key].items.push(item)
+        });
+
+        // 得到有序列表
+        let lists = [];
+        let others = [];
+
+        for (let key in map) {
+          let value = map[key];
+          if (value.title.match(/[a-zA-Z]/)) {
+            lists.push(value)
+          } else {
+            others.push(value)
+          }
         }
-      })
+
+        lists.sort((a, b) => {
+          return a.title.charCodeAt(0) - b.title.charCodeAt(0)
+        });
+
+        return lists.concat(others)
+      },
+      getLibraryBookList() {
+        this.$http.get('/school/shelf-index').then(r => {
+          // console.log(r)
+          if (r.status == 'success') {
+            this.libraryLists = r.data.shelves
+          }
+        })
+      },
+      getClassmateList() {
+        this.$http.get('/book/class-student').then(r => {
+          // console.log(r)
+          if (r.status == 'success') {
+            this.classLists = this._formatClassmate(r.data.students)
+          }
+        })
+      }
+    },
+    activated() {
+      this.getClassmateList();
+      this.getLibraryBookList()
     }
   }
 </script>
@@ -57,61 +91,18 @@
 <style scoped lang="scss">
   @import "common/scss/const.scss";
   @import "common/scss/mymixin.scss";
-
-  .tab {
-    height: 88px;
-    padding: 0 24px;
-    box-sizing: border-box;
-    background: $color-background-h;
-    border-bottom: 1px solid $color-border;
-    @extend %between;
-    i{
-      font-size: $font-size-large-x;
-    }
-    h2{
-      font-size: $font-size-medium-x;
-      color: $color-text-d;
-    }
+  .share{
+    height: calc(100% - 98px);
+    position: relative;
   }
-
-  .library-content {
+  .share-content {
     position: absolute;
     top: 88px;
-    bottom: 98px;
+    bottom: 0;
     left: 0;
     right: 0;
+    z-index: 4;
+    overflow: hidden;
   }
 
-  .library-lists {
-    padding: 24px;
-    box-sizing: border-box;
-    @extend %between;
-    flex-wrap: wrap;
-    li {
-      width: 218px;
-      border-radius: 10px;
-      background: $color-background-h;
-      padding: 30px 0 20px;
-      margin-bottom: 24px;
-      box-sizing: border-box;
-      @extend %start;
-      flex-direction: column;
-      .img {
-        width: 172px;
-        height: 170px;
-        margin-left: 7px;
-        margin-bottom: 7px;
-      }
-      h3 {
-        font-size: $font-size-large-x;
-        color: $color-text-d;
-        font-weight: bold;
-        @include no-wrap
-      }
-      h5 {
-        font-size: $font-size-small-x;
-        color: $color-text-l;
-      }
-    }
-  }
 </style>

@@ -1,12 +1,12 @@
 <template>
   <ul class="book-list">
-    <li class="item" v-for="item in lists" :key="item.origin+item.id" @click="selectItem(item)">
+    <li class="item" v-for="item in lists" :key="item.isbn" @click="selectItem(item)">
       <div class="img">
         <img v-lazy="item.images_large" alt="">
       </div>
       <div class="text">
-        <h4>{{item.title}}</h4>
-        <h5>{{item.author}}</h5>
+        <h4 v-html="item.title"></h4>
+        <h5 v-html="item.author"></h5>
         <p v-html="item.summary"></p>
       </div>
     </li>
@@ -42,6 +42,9 @@
     background: #fff;
     @extend %start;
     align-items: stretch;
+    &:first-of-type{
+      margin-top: 0;
+    }
     .img {
       margin-right: 26px;
       width: 160px;

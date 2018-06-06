@@ -120,6 +120,8 @@
         flex: none;
       }
       .text {
+        width: 478px;
+        flex: none;
         text-align: left;
         padding-top: 10px;
         font-size: $font-size-small-x;
@@ -128,15 +130,18 @@
         flex-direction: column;
         align-items: flex-start;
         h2 {
+          width: 100%;
           font-size: $font-size-large-x;
           color: $color-text-d;
           @include no-wrap
         }
         h3 {
+          width: 100%;
           font-size: $font-size-medium;
           @include no-wrap
         }
         h4 {
+          width: 100%;
           @include no-wrap
         }
         p span {

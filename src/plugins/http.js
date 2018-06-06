@@ -67,8 +67,10 @@ http.interceptors.response.use(
 
         case 401:
           err.message = '未授权，请登录';
-          window.localStorage.clear();
-          window.location.reload();
+          if(localStorage.getItem('MY_USER_INFO')){
+            localStorage.clear();
+            location.reload();
+          }
           break;
 
         case 403:

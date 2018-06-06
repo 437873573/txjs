@@ -1,45 +1,53 @@
 <template>
   <main class="proof">
-    <header>
-      <div class="img">
-        <img v-lazy="list.images_large" alt="">
-      </div>
-      <div class="text">
-        <h3>{{list.title}}</h3>
-        <h4>{{list.author}} <span>校长推荐</span></h4>
-        <p v-html="list.summary"></p>
-      </div>
-    </header>
-    <section class="code" :class="{not:status=='CANCEL'||status=='FINISHED'}">
+    <header class="code" :class="{not:status=='REJECT'||status=='FINISHED'}">
       <h3>取书码</h3>
-      <h1 v-if="status=='CANCEL'">已过期</h1>
-      <h1 v-else-if="status=='FINISHED'">已归还</h1>
-      <h1 v-else-if="status=='READING'">已取书</h1>
-      <h1 v-else>{{code}}</h1>
+      <h2 v-if="status=='REJECT'">已过期</h2>
+      <h2 v-else-if="status=='FINISHED'">已归还</h2>
+      <h2 v-else-if="status=='READING'">已取书</h2>
+      <h2 v-else>{{code}}</h2>
       <h4>有效期至  {{time}}</h4>
-    </section>
-    <p class="notice">
-      温馨提示：<br>
-      1.凡本校学生均可在本室借阅图书。每次借书不得超过2册。<br>
-      2.为了加快图书的流通，借阅时间不能超过1个月。<br>
-      3.借阅到期必须及时归还，如需继续使用可办续借手续，长期不归还者停止借阅权利，并按遗失图书处理。<br>
-      4.所借图书如有污损、涂写、圈点及遗失者，能买到原版的图书可买书赔偿，否则按以下规定赔偿：<br>
-      ①、丢失孤本书、特藏书、工具书按原价四倍以上赔偿。<br>
-      ②、丢失多卷书中的2至4册者，均按全套价赔偿。 <br>
-      5.员工在调动工作或离开本公司时，应在离开前还清所借的图
-    </p>
+    </header>
+    <Scroll class="proof-detail">
+      <div>
+        <h3>借阅书单：</h3>
+        <BookList :lists="lists"></BookList>
+        <p class="notice">
+          温馨提示：<br>
+          1.凡本校学生均可在本室借阅图书。每次借书不得超过2册。<br>
+          2.为了加快图书的流通，借阅时间不能超过1个月。<br>
+          3.借阅到期必须及时归还，如需继续使用可办续借手续，长期不归还者停止借阅权利，并按遗失图书处理。<br>
+          4.所借图书如有污损、涂写、圈点及遗失者，能买到原版的图书可买书赔偿，否则按以下规定赔偿：<br>
+          ①、丢失孤本书、特藏书、工具书按原价四倍以上赔偿。<br>
+          ②、丢失多卷书中的2至4册者，均按全套价赔偿。 <br>
+          5.员工在调动工作或离开本公司时，应在离开前还清所借的图
+        </p>
+      </div>
+    </Scroll>
   </main>
 </template>
 
 <script>
+  import BookList from 'base/bookList'
+  import Scroll from 'base/scroll'
   export default {
     name: "proof",
+    components:{BookList,Scroll},
     data() {
       return {
         code:'------',
         time:'00/00 00:00',
         status:'APPLYING',
-        list:{}
+        list:[]
+      }
+    },
+    computed:{
+      lists(){
+        let arr=[]
+        this.list.forEach(v=>{
+          arr.push(v.book)
+        })
+        return arr
       }
     },
     activated() {
@@ -49,7 +57,7 @@
           this.code = r.data.info.random_code;
           this.time=r.data.info.deadline;
           this.status=r.data.info.status;
-          this.list=r.data.info.borrow_library_book_item[0].book
+          this.list=r.data.info.borrow_library_book_item
         }
       })
     }
@@ -68,53 +76,6 @@
     bottom: 0;
     z-index: 4;
     background: $color-background;
-  }
-  header{
-    padding: 12px 24px;
-    height: 240px;
-    box-sizing: border-box;
-    background: #fff;
-    @extend %start;
-    align-items: stretch;
-    .img {
-      margin-right: 26px;
-      flex: none;
-      width: 160px;
-      height: 100%;
-    }
-    .text {
-      @extend %around;
-      padding: 10px 0;
-      box-sizing: border-box;
-      align-items: flex-start;
-      flex-direction: column;
-      h3 {
-        font-size: $font-size-large-x;
-        color: $color-text-d;
-        font-weight: bold;
-        @include no-wrap;
-      }
-      h4 {
-        color: $color-text-l;
-        font-size: $font-size-medium;
-        @extend %start;
-        span {
-          flex: none;
-          display: block;
-          width: 124px;
-          height: 36px;
-          border: 1px solid $color-theme;
-          border-radius: 5px;
-          margin-left: 20px;
-          color: $color-theme;
-        }
-      }
-      p {
-        text-align: left;
-        font-size: $font-size-medium;
-        @include no-wrap-multi(2)
-      }
-    }
   }
   .code{
     height: 322px;
@@ -135,11 +96,21 @@
     h3{
       font-size: $font-size-medium-x;
     }
-    h1{
+    h2{
       font-size: 96px;
     }
     h4{
       font-size: $font-size-medium;
+    }
+  }
+  .proof-detail{
+    @extend %cover;
+    top: 362px;
+    overflow: hidden;
+    h3{
+      line-height: 2;
+      text-align: left;
+      padding-left: 24px;
     }
   }
   .notice{

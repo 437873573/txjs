@@ -6,6 +6,9 @@ const mutations = {
   [types.SET_USER](state, user) {
     state.user = user
   },
+  [types.SET_CLASSMATE](state, classmate) {
+    state.classmate = classmate
+  },
   [types.SET_BOOK](state, book) {
     state.book = book
   },

@@ -13,7 +13,7 @@
       </li>
       <router-link tag="li" class="item" :to="{path:'/user/userInfo/classSetting'}">
         <h4>班级</h4>
-        <p v-html="user.class"></p>
+        <p v-html="user.class_name"></p>
       </router-link>
       <li class="item">
         <h4>手机</h4>

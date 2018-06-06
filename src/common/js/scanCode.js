@@ -25,8 +25,13 @@ export const scan = {
           needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
           scanType: ["barCode"],
           success: function (res) {
+            // alert(res.resultStr)
+            // for(let k in res){
+            //   alert(res[k])
+            // }
             let result = res.resultStr.split(',')[1];
-            window.location.replace=url+'#/newBook?isbn='+result+'&r='+Math.random()
+            // alert(result)
+            window.location.replace(url+'#/newBook?isbn='+result+'&r='+Math.random())
           }
         });
       });

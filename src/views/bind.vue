@@ -5,7 +5,7 @@
       <div class="status-right" :class="flag?'':'no'">添加班级</div>
     </section>
     <keep-alive>
-      <router-view @next="next" @show="show" @status="status"></router-view>
+      <router-view @next="next" @show="show" @status="status" @success="success"></router-view>
     </keep-alive>
     <Confirm ref="confirm" :confirmBtnText="text" :canShow="false" :head="head">
       <div id="text" v-html="message"></div>
@@ -16,25 +16,34 @@
 <script>
   export default {
     name: "bind",
-    data(){
-      return{
-        flag:false,
-        head:'填写有以下错误',
-        message:'',
-        text:'确定'
+    data() {
+      return {
+        flag: false,
+        head: '填写有以下错误',
+        message: '',
+        text: '确定'
       }
     },
-    methods:{
-      status(flag){
-        this.flag=flag
+    methods: {
+      status(flag) {
+        this.flag = flag
       },
-      next(){
-        this.flag=true;
-        this.$router.push({name:'info'})
+      next() {
+        this.flag = true;
+        this.$router.push({name: 'info'})
       },
-      show(mess){
-        this.message=mess;
+      show(mess) {
+        this.message = mess;
         this.$refs.confirm.show()
+      },
+      success() {
+        this.$http.get('/profile').then(r => {
+            if (r.status == 'success') {
+              this.$store.commit('SET_USER', r.data.user)
+              this.$router.push({path: '/'})
+            }
+          }
+        ).catch(err => console.log(err));
       }
     },
   }
@@ -43,10 +52,12 @@
 <style scoped lang="scss">
   @import "common/scss/const.scss";
   @import "common/scss/mymixin.scss";
-  .bind{
+
+  .bind {
     @extend %cover;
     z-index: 3;
   }
+
   .status {
     padding-top: 60px;
     @extend %between;
@@ -70,17 +81,18 @@
       }
       &.no {
         color: $color-text-l;
-        border-top-color: $color-text-l   ;
+        border-top-color: $color-text-l;
         &:before {
           background: $color-text-l;
         }
       }
     }
   }
+
   #text {
-     padding: 20px 40px 40px;
-     text-align: left;
-     font-size: $font-size-medium-x;
-     color: $color-text-l;
-   }
+    padding: 20px 40px 40px;
+    text-align: left;
+    font-size: $font-size-medium-x;
+    color: $color-text-l;
+  }
 </style>

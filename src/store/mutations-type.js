@@ -1,5 +1,7 @@
 export const SET_USER = 'SET_USER'
 
+export const SET_CLASSMATE = 'SET_CLASSMATE'
+
 export const SET_BOOK = 'SET_BOOK'
 
 export const SET_SHOWDETAIL = 'SET_SHOWDETAIL'

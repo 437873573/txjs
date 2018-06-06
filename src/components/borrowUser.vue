@@ -24,7 +24,10 @@
         </ul>
       </Scroll>
     </Confirm>
-    <Confirm :head="head2" ref="confirm2" :canShow="false" :confirmBtnText="confirmBtnText" @confirm="noUser">
+    <Confirm :head="head2" ref="confirm2"
+             :canShow="false"
+             :confirmBtnText="confirmBtnText"
+             @confirm="noUser">
       <div id="text" v-html="message"></div>
     </Confirm>
   </div>
@@ -49,9 +52,9 @@
     data() {
       return {
         head: '请选择书籍拥有者',
-        head2:'提示',
-        message:'',
-        confirmBtnText:'确定',
+        head2: '提示',
+        message: '',
+        confirmBtnText: '确定',
         scrollX: true,
         scrollY: false,
         oid: 0
@@ -60,12 +63,19 @@
     props: {
       data: {
         type: Object,
-        default: {}
+        default() {
+          return {}
+        }
       }
     },
     methods: {
       borrow() {
-        if (this.data.user.length) {
+        let hash = window.location.hash;
+        // console.log(hash)
+        if (hash.search('share') != -1) {
+          this.oid = this.data.user[0].origin_id;
+          this.toOrder()
+        } else if (this.data.user.length) {
           this.$refs.userLists.style.width = 168 * this.data.user.length / 7.5 + 'vw'
           this.$refs.confirm.show()
         }
@@ -74,14 +84,14 @@
         this.$http.post('/bill/share-store', {user_book_id: this.oid}).then(r => {
           if (r.status == 'success') {
             this.$router.push({path: '/order', query: {id: r.data.id}})
-          }else {
-            this.message=r.mess
+          } else {
+            this.message = r.mess
             this.$refs.confirm2.show()
           }
         })
       },
-      noUser(){
-        this.data.user=[]
+      noUser() {
+        this.data.user = []
       }
     },
   }
@@ -97,7 +107,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 4;
+    z-index: 10;
     background: $color-background;
   }
 
@@ -177,6 +187,7 @@
       }
     }
   }
+
   #text {
     padding: 20px 40px 40px;
     text-align: left;

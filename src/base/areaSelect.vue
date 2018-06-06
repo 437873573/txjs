@@ -1,40 +1,56 @@
 <template>
   <div>
-    <div class="area-mask " @click="select" :class="{mask_active: status}"></div>
+    <div class="area-mask "
+         :class="{mask_active: status}"
+         @click="select"></div>
     <transition name="fade">
       <div class="area-contain" :class="{area_contain_active: status}" v-if="status">
         <section class="area-main">
           <header class="area-header">所在地区<i class="area-close" @click="select">✖</i></header>
           <div class="area-top  border-a">
-            <div class="area-province area-top-item" :class="{area_top_active: 1==areaStatus}" @click="selectArea(1)">
+            <div class="area-province area-top-item"
+                 :class="{area_top_active: 1==areaStatus}"
+                 @click="selectArea(1)">
               {{CheckArea.province}}
             </div>
-            <div class="area-city area-top-item" :class="{area_top_active: 2==areaStatus}" @click="selectArea(2)">
+            <div class="area-city area-top-item"
+                 :class="{area_top_active: 2==areaStatus}"
+                 @click="selectArea(2)">
               {{CheckArea.city}}
             </div>
-            <div class="area-region area-top-item" :class="{area_top_active: 3==areaStatus}" @click="selectArea(3)">
+            <div class="area-region area-top-item"
+                 :class="{area_top_active: 3==areaStatus}"
+                 @click="selectArea(3)">
               {{CheckArea.region}}
             </div>
           </div>
           <div class="area-content border">
             <ul class="area-data" :class="{none: 1!=areaStatus}">
-              <li class="area-data-item" v-for="(item,key,index) in data" @click="checkProvOne(key,item.name,item.id)"
-                  :class="{red: key==checkProvince}">
+              <li class="area-data-item"
+                  v-for="(item,key,index) in data"
+                  @click="checkProvOne(key,item.name,item.id)"
+                  :class="{red: item.id==pId}">
                 <span class="area-text">{{item.name}}</span>
                 <!--<i class="icon-check iconfont" style="margin-left: 0.1rem" :class="{none: key != checkProvince}"></i>-->
               </li>
             </ul>
-            <ul class="area-data" :class="{none: 2!=areaStatus}" v-if="data[checkProvince]">
-              <li class="area-data-item" v-for="(item,key,index) in data[checkProvince].child"
-                  @click="checkCityOne(key,item.name,checkProvince,item.id)" :class="{red: key==checkCity}">
+            <ul class="area-data"
+                :class="{none: 2!=areaStatus}"
+                v-if="data[checkProvince]">
+              <li class="area-data-item"
+                  v-for="(item,key,index) in data[checkProvince].child"
+                  @click="checkCityOne(key,item.name,checkProvince,item.id)"
+                  :class="{red: key==checkCity}">
                 <span class="area-text">{{item.name}}</span>
                 <!--<i class="icon-check iconfont" style="margin-left: 0.1rem" :class="{none: key != checkCity}"></i>-->
               </li>
             </ul>
             <ul class="area-data" :class="{none: 3!=areaStatus}"
                 v-if="data[checkProvince]&&data[checkProvince].child[checkCity].child">
-              <li class="area-data-item" v-for="(item,key,index) in data[checkProvince].child[checkCity].child"
-                  @click="checkRegionOne(key,item.name,item.id)" :class="{red: key==checkRegion}">
+              <li class="area-data-item"
+                  v-for="(item,key,index) in data[checkProvince].child[checkCity].child"
+                  @click="checkRegionOne(key,item.name,item.id)"
+                  :class="{red: key==checkRegion}">
                 <span class="area-text">{{item.name}}</span>
                 <!--<i class="icon-check iconfont" style="margin-left: 0.1rem" :class="{none: key != checkRegion}"></i>-->
               </li>
@@ -76,12 +92,24 @@
       status: {
         type: Boolean,
         default: false
-      }
+      },
+      pId:{
+        type:Number,
+        default:0
+      },
+      cId:{
+        type:Number,
+        default:0
+      },
+      rId:{
+        type:Number,
+        default:0
+      },
     },
     methods: {
       select() {
         this.$emit('areashow');
-        this.$emit('get',this.CheckArea)
+        this.$emit('get', this.CheckArea)
         var data = this.CheckArea.province + ' ' + this.CheckArea.city + ' ' + this.CheckArea.region;
         this.$emit('update:area', data)
       },
@@ -119,12 +147,36 @@
         this.CheckArea.region = name;
         this.CheckArea.regionId = id;
         this.select()
-      }
+      },
     },
-    created: function () {
-      this.$on('area-select', function (id) {
-        // ...
-      })
+    created(){
+      // console.log(this.pId,this.cId,this.rId)
+      if(this.pId===0) return
+      // console.log(this.pId)
+      let i=this.data.findIndex(v=>{
+        return v.id==this.pId
+      });
+      // console.log(i)
+      let iv=this.data.find(v=>{
+        return v.id==this.pId
+      });
+      if(!iv) return
+      let j=iv.child.findIndex(v=>{
+        return v.id==this.cId
+      });
+      let jv=iv.child.find(v=>{
+        return v.id==this.cId
+      });
+      let k=jv.child.findIndex(v=>{
+        return v.id==this.rId
+      });
+      let kv=jv.child.find(v=>{
+        return v.id==this.rId
+      });
+      this.checkProvOne(i,iv.name,this.pId);
+      this.checkCityOne(j,jv.name,i,this.cId);
+      this.checkRegionOne(k,kv.name,this.rId);
+      this.select()
     }
   }
 </script>

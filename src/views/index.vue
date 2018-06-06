@@ -3,7 +3,8 @@
     <transition name="fade">
       <div class="searchMinBox" v-show="searchMin">
         <i class="icon-nav_icon_scan" @click="scan"></i>
-        <div class="searchMin"><i class="icon-btn_icon_search"></i>&nbsp;&nbsp;在这里搜你想要的书籍</div>
+        <router-link tag="div" :to="{path:'/search'}" class="searchMin"><i class="icon-btn_icon_search"></i>&nbsp;&nbsp;在这里搜你想要的书籍
+        </router-link>
         <i class="icon-nav_icon_news"></i>
       </div>
     </transition>
@@ -19,18 +20,30 @@
           <div class="news"><i class="icon-nav_icon_news"></i></div>
           <Slider>
             <div v-for="banner in banners">
-              <img :src="banner.image" @load="loadImg">
+              <img :src="banner.image" @load="loadImg" @error="error">
             </div>
           </Slider>
         </section>
         <div class="searchBox" ref="searchBox">
-          <div class="search" ref="search"><i class="icon-btn_icon_search"></i>&nbsp;&nbsp;在这里搜你想要的书籍</div>
+          <div class="search" ref="search" @click="$router.push({path:'/search'})"><i class="icon-btn_icon_search"></i>&nbsp;&nbsp;在这里搜你想要的书籍
+          </div>
         </div>
         <nav>
-          <router-link tag="div" :to="{path:'/myBook'}"><div class="img"><img src="../common/img/home_icon_personal.png" alt=""></div><span>我的图书</span></router-link>
-          <router-link tag="div" :to="{path:'/orderList'}"><div class="img"><img src="../common/img/home_icon_star.png" alt=""></div><span>测试</span></router-link>
-          <div><div class="img"><img src="../common/img/home_icon_find.png" alt=""></div><span>发现更多</span></div>
-          <div><div class="img"><img src="../common/img/home_icon_sign.png" alt=""></div><span>每日签到</span></div>
+          <router-link tag="div" :to="{path:'/user/userBook'}">
+            <div class="img"><img src="../common/img/home_icon_personal.png" alt=""></div>
+            <span>我的图书</span></router-link>
+          <router-link tag="div" :to="{path:'/'}">
+            <div class="img"><img src="../common/img/home_icon_star.png" alt=""></div>
+            <span>阅读之星</span></router-link>
+          <router-link tag="div" :to="{path:'/news'}">
+            <div class="img"><img src="../common/img/home_icon_find.png" alt=""></div>
+            <span>发现更多</span></router-link>
+          <div @click="sign">
+            <div class="img">
+              <img src="../common/img/home_icon_sign.png" alt="">
+            </div>
+            <span>{{user.sign?'已签到':'每日签到'}}</span>
+          </div>
         </nav>
         <!-- 图书推荐列表 -->
         <div class="recommend-list">
@@ -51,17 +64,20 @@
   import Scroll from 'base/scroll'
   import Loading from 'base/loading'
   import BookList from 'base/bookList'
-  import {mapActions} from 'vuex'
+  import {mapActions, mapGetters} from 'vuex'
   import {scan} from "common/js/scanCode";
 
   export default {
     name: "index",
-    mixins:[scan],
+    mixins: [scan],
     components: {
       Slider,
       Scroll,
       Loading,
       BookList
+    },
+    computed: {
+      ...mapGetters(['user'])
     },
     data() {
       return {
@@ -72,6 +88,20 @@
       }
     },
     methods: {
+      sign() {
+        if (!this.user.sign) {
+          this.$http.post('/sign').then(r => {
+            if (r.status == 'success') {
+              this.$http.get('/profile').then(r => {
+                  if (r.status == 'success') {
+                    this.$store.commit('SET_USER', r.data.user)
+                  }
+                }
+              ).catch(err => console.log(err));
+            }
+          })
+        }
+      },
       selectItem(item) {
         this.$router.push({path: `/index/${item.id}`});
         this.selectBook({
@@ -84,6 +114,7 @@
         let boxTop = this.$refs.searchBox.offsetTop,
           secTop = this.$refs.search.offsetTop,
           scrollY = boxTop + secTop + pos.y;
+        // console.log(boxTop,secTop)
         if (scrollY <= 0) {
           this.searchMin = true
         } else {
@@ -97,6 +128,14 @@
           this.flag = true
         }
       },
+      error() {
+        this.$http.get('/banner').then(r => {
+          // console.log(r)
+          if (r.status == 'success') {
+            this.banners = r.data.banners
+          }
+        });
+      },
       ...mapActions(['selectBook'])
     },
     beforeCreate() {
@@ -108,7 +147,8 @@
       this.$http.get('/banner').then(r => {
         // console.log(r)
         if (r.status == 'success') {
-          this.banners = r.data.banners
+          this.banners = r.data.banners;
+          this.$refs.scroll.refresh();
         }
       });
       //获取推荐图书
@@ -160,10 +200,10 @@
         margin-left: 24px;
       }
     }
-    >i:first-of-type{
+    > i:first-of-type {
       font-size: 36px;
     }
-    >i:last-of-type{
+    > i:last-of-type {
       font-size: 40px;
     }
   }
@@ -227,10 +267,11 @@
     @extend %between;
     align-items: stretch;
     padding: 26px 0;
+    margin-bottom: 20px;
     height: 160px;
     box-sizing: border-box;
     background: $color-background-h;
-    >div {
+    > div {
       flex: 1;
       @extend %between;
       flex-direction: column;

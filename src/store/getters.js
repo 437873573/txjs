@@ -2,6 +2,8 @@
 
 export const user = state => state.user
 
+export const classmate = state => state.classmate
+
 export const book = state => state.book
 
 export const showDetail=state=>state.showDetail

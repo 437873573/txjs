@@ -33,10 +33,6 @@
         type: String,
         default: '提示'
       },
-      text: {
-        type: String,
-        default: '是否申请借阅这本图书？'
-      },
       cancelBtnText: {
         type: String,
         default: '再考虑一下'
@@ -46,7 +42,6 @@
         default: '确定申请'
       }
     },
-    watch: {},
     methods: {
       // 对外提供，显示对话框
       show() {
@@ -65,16 +60,6 @@
         this.$emit('cancel')
       }
     },
-    // 过滤器设计目的就是用于简单的文本转换
-    filters: {},
-    // 若要实现更复杂的数据变换，你应该使用计算属性
-    computed: {},
-    created() {
-    },
-    mounted() {
-    },
-    destroyed() {
-    }
   }
 </script>
 

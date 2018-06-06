@@ -10,7 +10,7 @@
         <input type="text" placeholder="请输入验证码" v-model="code">
       </div>
       <div class="btn o" v-show="show" @click="getCode">获取验证码</div>
-      <div class="btn o disabled" v-show="!show">{{count}} s</div>
+      <div class="btn disabled" v-show="!show">{{count}} s</div>
     </div>
     <div class="btn x" @click="sub">下一步</div>
   </section>

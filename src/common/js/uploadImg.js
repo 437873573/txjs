@@ -44,6 +44,7 @@ export const upload = {
         });
         wx.chooseImage({
           count: 1,
+          sizeType: ['compressed'],
           success: function (res) {
             let localId = res.localIds[0];
             if(isiOS){

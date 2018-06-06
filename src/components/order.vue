@@ -8,8 +8,8 @@
         <h2 v-html="data.book.title"></h2>
         <h3 v-html="data.book.author"></h3>
         <p v-html="data.book.summary"></p>
-        <h1>借出人：{{data.book_user.nickname}}</h1>
-        <h1>申请人：{{data.user.nickname}}</h1>
+        <h1>借出人：{{data.book_user.realname}}</h1>
+        <h1>申请人：{{data.user.realname}}</h1>
       </article>
     </header>
     <section class="share">
@@ -33,7 +33,6 @@
           <div class="btn o" @click="update('CANCEL')">取消申请</div>
         </div>
         <div class="btns" v-if="data.type=='BORROW'&&data.status=='AGREE'">
-          <div class="btn o" @click="update('CANCEL')">取消申请</div>
           <div class="btn" @click="update('READING')">书已借到</div>
         </div>
         <div class="btns" v-else-if="data.type=='LEND'&&data.status=='APPLYING'">
@@ -210,6 +209,8 @@
         height: 98px;
         @extend %between;
         .btn {
+          height: 100%;
+          line-height: 98px;
           flex: 1;
           border: none;
           border-top: 1px solid $color-border;
@@ -218,5 +219,4 @@
       }
     }
   }
-
 </style>

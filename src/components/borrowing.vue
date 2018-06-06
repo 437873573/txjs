@@ -1,7 +1,7 @@
 <template>
-  <Scroll class="my-book-content" :data="lists">
-    <ul class="my-book-lists">
-      <li class="item" v-for="v in lists" :key="v.id" v-if="v.downAble !='0'">
+  <Scroll class="user-book-content" :data="lists">
+    <ul class="user-book-lists">
+      <li class="item" v-for="v in lists" :key="v.id" v-if="v.downAble !='0'" @click.stop="selectItem(v)">
         <div class="img">
           <img v-lazy="v.images_large">
         </div>
@@ -9,11 +9,11 @@
           <h2 v-html="v.title"></h2>
           <h3 v-html="v.author"></h3>
           <div class="btns" v-if="v.status=='ON_SALE'">
-            <div class="btn" @click="sub(v)">下架本书</div>
+            <div class="btn" @click.stop="sub(v)">下架本书</div>
           </div>
           <div class="btns" v-else-if="v.status=='NORMAL'">
-            <div class="btn" @click="sup(v)">上架本书</div>
-            <div class="btn disabled" @click="del(v)">删除</div>
+            <div class="btn" @click.stop="sup(v)">上架本书</div>
+            <div class="btn o" @click.stop="del(v)">删除</div>
           </div>
         </div>
       </li>
@@ -52,16 +52,20 @@
       }
     },
     methods: {
+      selectItem(v){
+        this.$router.push({path:'/newBook',query:{isbn:v.isbn}})
+      },
       sub(item) {
         this.$http.post('/book/share-update', {
           id: item.id,
           action: 'NORMAL'
         }).then(r => {
           if (r.status == 'success') {
-            let i = this.data.findIndex(v => {
-              return v.id == item.id
-            });
-            this.data[i].status = 'NORMAL'
+            item.status='NORMAL'
+            // let i = this.data.findIndex(v => {
+            //   return v.id == item.id
+            // });
+            // this.data[i].status = 'NORMAL'
           }
         })
       },
@@ -71,10 +75,11 @@
           action: 'ON_SALE'
         }).then(r => {
           if (r.status == 'success') {
-            let i = this.data.findIndex(v => {
-              return v.id == item.id
-            });
-            this.data[i].status = 'ON_SALE'
+            // let i = this.data.findIndex(v => {
+            //   return v.id == item.id
+            // });
+            // this.data[i].status = 'ON_SALE'
+            item.status='ON_SALE'
           }
         })
       },
