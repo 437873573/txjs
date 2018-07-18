@@ -51,7 +51,7 @@
         </router-link>
         <router-link tag="li" class="nli" :to="{path:'/user/success'}">
           <div class="img">
-            <img src="../common/img/nav_icon_news_sm.png" alt="">
+            <img src="../common/img/personal_icon_sc_sm.png" alt="">
           </div>
           <h3>我的成就</h3>
           <i class="icon-tabbar_icon_more_selected"></i>
