@@ -1,6 +1,7 @@
 import wx from 'weixin-js-sdk'
 
 let url = location.href.split('#')[0];
+let hash = location.hash;
 export const scan = {
   methods: {
     scan() {
@@ -31,7 +32,12 @@ export const scan = {
             // }
             let result = res.resultStr.split(',')[1];
             // alert(result)
-            window.location.replace(url+'#/newBook?isbn='+result+'&r='+Math.random())
+            if(hash.search('user') != -1){
+              window.history.pushState(null, ' ', '#/user');
+            }else{
+              window.history.pushState(null, ' ', '#/index');
+            }
+            window.location.href = url + '#/newBook?isbn=' + result + '&r=' + Math.random()
           }
         });
       });

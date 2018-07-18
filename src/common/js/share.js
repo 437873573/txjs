@@ -1,10 +1,10 @@
 import wx from 'weixin-js-sdk'
 
 let url = location.href.split('#')[0];
-let img='http://txjs-wechat-hnw.mion.cn/logo.jpg';
+window.img='http://txjs-wechat-hnw.mion.cn/logo.jpg';
 window.link='';
 window.title='同学借书';
-const desc='同学借书微信平台提供个人图书共享，班级书籍共享，学校图书馆远程借阅管理，个人书架管理等自助的管理平台';
+window.desc='同学借书微信平台提供个人图书共享，班级书籍共享，学校图书馆远程借阅管理，个人书架管理等自助的管理平台';
 export const share = {
   methods: {
     share() {

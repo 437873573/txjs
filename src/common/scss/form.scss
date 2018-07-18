@@ -4,7 +4,9 @@ input[type='text'], select, textarea {
   color: $color-text-d;
   background: transparent;
   border-radius: 10px;
+  -webkit-appearance: none;
 }
+
 input[type='text'], select {
   height: 88px;
   border-radius: 10px;
@@ -17,18 +19,21 @@ input[type='text'], select {
     border-color: $color-theme;
   }
 }
+
 input, textarea {
   &::placeholder {
     color: $color-text-l;
   }
   caret-color: $color-theme
 }
-.text{
+
+.text {
   position: relative;
-  input[type='text']{
+  margin: 40px 0;
+  input[type='text'] {
     padding-left: 84px;
   }
-  i{
+  i {
     width: 48px;
     height: 48px;
     position: absolute;
@@ -36,18 +41,39 @@ input, textarea {
     top: 20px;
     background-size: cover;
   }
+  p {
+    position: absolute;
+    left: 20px;
+    top: 90px;
+    font-size: $font-size-small;
+    color: #ff4d5a;
+    &:before {
+      content: '*';
+      display: inline-block;
+      margin-right: 4px;
+    }
+  }
 }
-.select{
+
+.select {
   position: relative;
-  margin: 30px 0;
-  input::placeholder{
-    color: #333333;
-  }
-  select{
+  margin: 40px 0;
+  input[type='text'],select {
     padding-right: 84px;
-    -webkit-appearance: none;
   }
-  i{
+  p {
+    position: absolute;
+    left: 20px;
+    top: 90px;
+    font-size: $font-size-small;
+    color: #ff4d5a;
+    &:before {
+      content: '*';
+      display: inline-block;
+      margin-right: 4px;
+    }
+  }
+  i {
     position: absolute;
     right: 24px;
     top: 36px;

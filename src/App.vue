@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Tab :i="index"></Tab>
+    <TabBar :i="index"></TabBar>
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
@@ -8,12 +8,12 @@
 </template>
 
 <script>
-  import Tab from 'components/tab'
+  import TabBar from 'components/tabBar'
   import {share} from 'common/js/share'
 
   export default {
     name: 'App',
-    components: {Tab},
+    components: {TabBar},
     mixins: [share],
     data() {
       return {
@@ -26,34 +26,40 @@
         // console.log(hash)
         if (hash.search('share') != -1) {
           return this.index = 1
-        } else if (hash.search('mall') != -1) {
+        } else if (hash.search('organization') != -1) {
           return this.index = 2
-        } else if (hash.search('user') != -1) {
+        } else if (hash.search('mall') != -1) {
           return this.index = 3
+        } else if (hash.search('user') != -1) {
+          return this.index = 4
         } else {
           return this.index = 0
         }
       }
     },
-    updated(){
+    updated() {
       this.hash()
     },
     mounted() {
-      this.$http.get('/profile').then(
-        r => {
-          let bound = r.data.bound
-          if ((bound & 1) == 0) {
-            this.$router.push({name: 'login'})
-          } else if ((bound & 2) == 0) {
-            this.$router.push({name: 'info'})
+      clearTimeout(this.wait);
+      this.wait = setTimeout(() => {
+        this.$http.get('/profile').then(r => {
+          let bound = r.data.bound;
+          this.$store.commit('SET_BOUND', bound);
+          if (bound === 3) {
+            this.$store.commit('SET_USER', r.data.user);
+            window.link = 'http://txjs-wechat-hnw.mion.cn?user_id=' + r.data.user.id;
+            if (window.location.hash === '#/') {
+              this.$router.replace({path: '/index'})
+            } else {
+              this.hash()
+            }
           } else {
-            this.$store.commit('SET_USER', r.data.user)
-            window.link = 'http://txjs-wechat-hnw.mion.cn?user_id=' + r.data.user.id
-            this.hash()
+            this.$router.replace({path: '/bind'})
           }
-        }
-      ).catch(err => console.log(err));
-      this.share()
+        });
+      }, 500);
+      // this.share()
     },
   }
 </script>

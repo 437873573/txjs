@@ -1,27 +1,41 @@
 <template>
-  <transition name="slide">
-    <ul class="user-info">
-      <li class="item">
-        <h4>头像</h4>
-        <div class="img">
-          <img :src="user.avatar" alt="">
-        </div>
-      </li>
-      <li class="item">
-        <h4>昵称</h4>
-        <p v-html="user.realname"></p>
-      </li>
-      <router-link tag="li" class="item" :to="{path:'/user/userInfo/classSetting'}">
-        <h4>班级</h4>
-        <p v-html="user.class_name"></p>
-      </router-link>
-      <li class="item">
-        <h4>手机</h4>
-        <p v-html="iphone"></p>
-      </li>
-      <router-view></router-view>
-    </ul>
-  </transition>
+  <ul class="user-info">
+    <li class="item">
+      <h4>头像</h4>
+      <div class="img">
+        <img v-lazy="user.avatar">
+      </div>
+    </li>
+    <li class="item">
+      <h4>昵称</h4>
+      <p>
+        {{user.realname}}
+        <!--<i class="icon-tabbar_icon_more_selected"></i>-->
+      </p>
+    </li>
+    <li class="item">
+      <h4>学校</h4>
+      <p>
+        {{user.school_name}}
+        <!--<i class="icon-tabbar_icon_more_selected"></i>-->
+      </p>
+    </li>
+    <router-link tag="li" class="item" :to="{path:'/user/info/classModify'}">
+      <h4>班级</h4>
+      <p>
+        {{user.grade_name+user.class_name}}
+        <i class="icon-tabbar_icon_more_selected"></i>
+      </p>
+    </router-link>
+    <router-link tag="li" class="item" :to="{path:'/user/info/mobileModify'}">
+      <h4>手机</h4>
+      <p>
+        {{iphone}}
+        <i class="icon-tabbar_icon_more_selected"></i>
+      </p>
+    </router-link>
+    <router-view></router-view>
+  </ul>
 </template>
 
 <script>
@@ -48,8 +62,7 @@
 
   .user-info {
     @extend %cover;
-    bottom: 98px;
-    z-index: 4;
+    z-index: 3;
   }
 
   .item {
@@ -58,8 +71,10 @@
     padding: 20px 24px;
     background: #fff;
     border-bottom: 1px solid $color-border;
+    border-image: svg(b-border) 1 ;
     &:last-of-type {
       border-bottom: none;
+      border-image: none;
     }
     @extend %between;
     h4 {
@@ -73,6 +88,7 @@
     .img {
       width: 136px;
       height: 136px;
+      border-radius: 50%;
       img {
         border-radius: 50%;
       }

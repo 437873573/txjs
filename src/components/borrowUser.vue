@@ -1,12 +1,8 @@
 <template>
   <div class="borrow-user">
-    <BookDetail :data="data" v-show="showDetail">
+    <BookDetail :data="data">
       <footer slot="footer">
-        <div class="mark">
-          <i :class="getFavoriteCls(book)" @click="toggleFavoriteCls(book)"></i>
-          收藏
-        </div>
-        <div class="borrow" @click="borrow" :class="data.user&&data.user.length?'':'not'">
+        <div class="borrow" @click="borrow" v-show="data.user" :class="data.user&&data.user.length?'':'not'">
           {{data.user&&data.user.length?'立即借阅':'已被借出'}}
         </div>
       </footer>
@@ -19,7 +15,7 @@
               <img v-lazy="v.user.avatar">
               <i :class="oid==v.origin_id?'select':'default'"></i>
             </div>
-            <h5 v-html="v.user.nickname"></h5>
+            <h5 v-html="v.user.realname"></h5>
           </li>
         </ul>
       </Scroll>
@@ -34,21 +30,12 @@
 </template>
 
 <script>
-  import {mapGetters} from 'vuex'
-  import {collect} from 'common/js/collect'
   import BookDetail from 'base/bookDetail'
   import Scroll from 'base/scroll'
 
   export default {
     name: "borrow-user",
     components: {BookDetail, Scroll},
-    mixins: [collect],
-    computed: {
-      ...mapGetters([
-        'showDetail',
-        'book',
-      ])
-    },
     data() {
       return {
         head: '请选择书籍拥有者',
@@ -76,16 +63,16 @@
           this.oid = this.data.user[0].origin_id;
           this.toOrder()
         } else if (this.data.user.length) {
-          this.$refs.userLists.style.width = 168 * this.data.user.length / 7.5 + 'vw'
+          this.$refs.userLists.style.width = 168 * this.data.user.length / 7.5 + 'vw';
           this.$refs.confirm.show()
         }
       },
       toOrder() {
-        this.$http.post('/bill/share-store', {user_book_id: this.oid}).then(r => {
-          if (r.status == 'success') {
-            this.$router.push({path: '/order', query: {id: r.data.id}})
+        this.$http.post('/bill-share/store', {user_book_id: this.oid}).then(r => {
+          if (r.status === 'success') {
+            this.$router.replace({path: `/course/${r.data.id}`})
           } else {
-            this.message = r.mess
+            this.message = r.mess;
             this.$refs.confirm2.show()
           }
         })
@@ -112,21 +99,21 @@
   }
 
   footer {
-    .mark {
-      width: 250px;
-      @extend %between;
-      flex-direction: column;
-      padding: 10px 0;
-      box-sizing: border-box;
-      font-size: $font-size-small-x;
-      background: #fff;
-      color: $color-theme;
-      i {
-        font-size: 48px;
-      }
-    }
+    /*<!--.mark {-->*/
+      /*<!--width: 250px;-->*/
+      /*<!--@extend %between;-->*/
+      /*<!--flex-direction: column;-->*/
+      /*<!--padding: 10px 0;-->*/
+      /*<!--box-sizing: border-box;-->*/
+      /*<!--font-size: $font-size-small-x;-->*/
+      /*<!--background: #fff;-->*/
+      /*<!--color: $color-theme;-->*/
+      /*<!--i {-->*/
+        /*<!--font-size: 48px;-->*/
+      /*<!--}-->*/
+    /*<!--}-->*/
     .borrow {
-      width: 500px;
+      width: 100%;
       line-height: 98px;
       box-sizing: border-box;
       background: $color-theme;
@@ -145,14 +132,15 @@
     overflow: hidden;
     width: 100%;
     height: 100%;
+    padding: 0 24px;
+    box-sizing: border-box;
   }
 
   .user-lists {
-    padding-top: 8px;
     @extend %start;
     li {
       width: 120px;
-      margin: 0 24px;
+      margin-right:20px;
       @extend %center;
       flex-direction: column;
       .img {
@@ -181,9 +169,13 @@
         }
       }
       h5 {
+        width: 120px;
         @include no-wrap;
-        margin: 6px 0;
+        margin-top: 6px;
         font-size: $font-size-small-x;
+      }
+      &:last-of-type{
+        margin-right: 0;
       }
     }
   }

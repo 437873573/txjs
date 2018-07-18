@@ -2,7 +2,7 @@
   <div class="search-box">
     <i class="icon-btn_icon_search"></i>
     <input type="text" class="box" ref="queryRef" v-model="query" :placeholder="placeholder">
-    <i class="icon-dismiss" v-show="query" @click="clearQuery">✖</i>
+    <i class="icon-tabbar_icon_del_selected" v-show="query" @click="clearQuery"></i>
   </div>
 </template>
 
@@ -68,19 +68,17 @@
     .box {
       flex: 1;
       margin: 0 5px;
-      line-height: 18px;
+      height: 60px;
       border: 0;
       outline: none;
       background: $color-background;
-      color: $color-text;
+      color: $color-text-d;
       font-size: $font-size-medium;
+      -webkit-appearance: none;
+      line-height: 60px;
       &::placeholder {
-        color: $color-text-d;
+        color: $color-text;
       }
-    }
-    .icon-dismiss {
-      font-size: 20px;
-      color: rgba(0,0,0,0.7);
     }
   }
 </style>

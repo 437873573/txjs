@@ -1,6 +1,6 @@
 <template>
   <ul class="book-list">
-    <li class="item" v-for="item in lists" :key="item.isbn" @click="selectItem(item)">
+    <li class="item" v-for="(item,index) in lists" :key="index" @click="selectItem(item)">
       <div class="img">
         <img v-lazy="item.images_large" alt="">
       </div>

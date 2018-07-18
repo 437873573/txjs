@@ -96,10 +96,8 @@
       },
       // 路由跳转逻辑
       selectItem(item) {
-        this.$router.push({path: `/search/${item.id}`});
-        this.selectBook({
-          book: item
-        })
+        this.$router.push({path: `/book/${item.id}`});
+        this.$store.commit('SET_BOOK', item);
         this.$emit('select')
       },
       // 什么时候不上拉刷新

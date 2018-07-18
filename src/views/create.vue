@@ -2,17 +2,20 @@
   <main class="create">
     <Switches :switches="switches" :currentIndex="currentIndex" @switch="switchItem"></Switches>
     <div class="form">
-      <div class="input">
-        <input type="text" placeholder="请输入您的姓名" v-model="name">
-      </div>
-      <div class="input">
-        <input type="text" placeholder="请输入您申请开通的学校名称" v-model="school">
+      <div class="select">
+        <input type="text" placeholder="请输入您的姓名" v-model="name" @click="error.applicant=''">
+        <p v-show="error.applicant" v-html="error.applicant"></p>
       </div>
       <div class="select">
-        <input type="text" placeholder="请选择您所在的地区" v-model="areaStatus" @click="maskStatus">
-        <i></i>
+        <input type="text" placeholder="请输入您申请开通的学校名称" v-model="school" @click="error.name=''">
+        <p v-show="error.name" v-html="error.name"></p>
       </div>
-      <div class="file" @click="upload">
+      <div class="select">
+        <input type="text" placeholder="请选择您所在的地区" v-model="areaStatus" @click="areaShow" ref="area">
+        <i></i>
+        <p v-show="error.area" v-html="error.area"></p>
+      </div>
+      <div class="file" @click="upload();error.attachments=''">
         <div class="file-img" v-show="photo?!isPhoto:isPhoto">
           <i class="icon-login_img_camera"></i>
           添加照片
@@ -21,49 +24,55 @@
           <img :src="photo?photo:''" alt="">
         </div>
         <h5>{{h5}}</h5>
+        <p v-show="error.attachments" v-html="error.attachments"></p>
       </div>
     </div>
-    <div class="btn x" @click="sub">完成创建</div>
-    <AreaSelect :data="areaList" :status="areaSelect" :class="{'none':!areaSelect}" :area='areaStatus'
-                @areashow="maskStatus" @get="get" @update:area="val => areaStatus = val">
-    </AreaSelect>
-    <Confirm ref="confirm" :confirmBtnText="text1" :canShow="false" :head="head">
+    <div class="btn x" @click="sub">提交创建</div>
+    <SelectArea :status="areaSelect"
+                :class="{'none':!areaSelect}"
+                :area='areaStatus'
+                @areaShow="areaShow"
+                @update:area="val => areaStatus = val">
+    </SelectArea>
+    <Confirm ref="confirm" :confirmBtnText="confirmText" :canShow="false" :head="head">
       <div id="text" v-html="message"></div>
     </Confirm>
   </main>
 </template>
 
 <script>
-  import AreaSelect from 'base/areaSelect'
-  // import Photo from 'base/photo'
+  import SelectArea from 'base/selectArea'
   import {upload} from "common/js/uploadImg";
-  import {AREAS} from 'common/js/area.js'
 
   export default {
     name: "create",
-    components: {AreaSelect},
+    components: {SelectArea},
     mixins: [upload],
     data() {
       return {
-        text: ['请上传学生证或其他证明照片', '请上传公章证明或机构证书'],
         switches: [
           {name: '个人创建'},
           {name: '机构创建'}
         ],
+        currentIndex: 0,
+        head:'提示',
+        confirmText:'确定',
+        message:'提交成功，请耐心等待审核结果',
+        text: ['请上传学生证或其他证明照片', '请上传公章证明或机构证书'],
         isPhoto: true,
         name: '',
         school: '',
-        currentIndex: 0,
         provinceId: '',
         cityId: '',
         regionId: '',
         areaStatus: '',
-        areaList: [],
         areaSelect: false,
-        head: '填写有以下错误',
-        message: '',
-        text1: '确定'
-
+        error: {
+          applicant: '',
+          area: '',
+          name: '',
+          attachments: '',
+        },
       }
     },
     computed: {
@@ -75,10 +84,10 @@
       switchItem(index) {
         this.currentIndex = index
       },
-      maskStatus() {
+      areaShow(ids) {
+        this.$refs.area.blur();
+        this.error.area='';
         this.areaSelect = !this.areaSelect;
-      },
-      get(ids) {
         this.provinceId = ids.provinceId;
         this.cityId = ids.cityId;
         this.regionId = ids.regionId;
@@ -94,21 +103,19 @@
           attachments: this.serverId
         }).then(r => {
           if (r.status == 'success') {
-            this.$router.push({path: '/'})
-          } else {
-            this.show(r.mess)
+           this.$refs.confirm.show()
+          } else if (r.status == 'fail') {
+            for (let k in r.data) {
+              // console.log(k,data.data[k])
+              this.error[k] = r.data[k][0]
+            }
+            if (!this.areaStatus) {
+              this.error.area = '请选择所在地区'
+            }
           }
-        }).catch(e => alert(e))
+        })
       },
-      show(mess) {
-        this.message = mess;
-        this.$refs.confirm.show()
-      }
     },
-    created() {
-      this.areaList = AREAS;
-    },
-
   }
 </script>
 
@@ -124,15 +131,13 @@
 
   .form {
     width: 580px;
-    margin: 0 auto;
-    .input, .select {
-      margin: 30px 0;
-    }
+    margin: 60px auto 0;
     .file {
       margin: 30px 0;
       @extend %start;
       color: $color-text-l;
       font-size: $font-size-medium;
+      position: relative;
       &-img {
         margin-right: 24px;
         padding: 10px;
@@ -153,12 +158,18 @@
         height: 160px;
         margin-right: 24px;
       }
+      p{
+        position: absolute;
+        left: 20px;
+        top: 170px;
+        font-size: $font-size-small;
+        color: #ff4d5a;
+        &:before {
+          content: '*';
+          display: inline-block;
+          margin-right: 4px;
+        }
+      }
     }
-  }
-  #text {
-    padding: 20px 40px 40px;
-    text-align: left;
-    font-size: $font-size-medium-x;
-    color: $color-text-l;
   }
 </style>

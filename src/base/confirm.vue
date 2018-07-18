@@ -4,7 +4,7 @@
       <div class="confirm-wrapper">
         <div class="confirm-content">
           <header>{{head}}</header>
-          <slot></slot>
+          <slot class="text"></slot>
           <div class="operate">
             <div v-show="canShow" @click="cancel" class="operate-btn left">{{ cancelBtnText }}</div>
             <div @click="confirm" class="operate-btn">{{ confirmBtnText }}</div>
@@ -31,7 +31,7 @@
       },
       head: {
         type: String,
-        default: '提示'
+        default: '温馨提示'
       },
       cancelBtnText: {
         type: String,
@@ -92,23 +92,24 @@
         border-radius: 20px;
         background: #fff;
         header {
-          padding: 40px 0 20px;
+          padding: 40px 0 30px;
           color: $color-text-d;
           font-size: $font-size-large-x;
         }
         .operate {
           display: flex;
           align-items: center;
-          font-size: $font-size-large;
+          font-size: $font-size-large-x;
+          margin-top: 30px;
+          background: svg(t-border);
           .operate-btn {
             flex: 1;
             height: 88px;
             line-height: 88px;
-            border-top: 1px solid $color-border;
             color: $color-theme;
             &.left {
               color: $color-text-l;
-              border-right: 1px solid $color-border;
+              background: svg(r-border);
             }
           }
         }

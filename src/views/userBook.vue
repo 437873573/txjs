@@ -1,8 +1,8 @@
 <template>
   <div class="user-book">
     <Switches :switches="switches" :currentIndex="currentIndex" @switch="selectItem"></Switches>
-    <Borrowing :data="borrowingData" :i="currentIndex" v-show="show==1"></Borrowing>
-    <Borrowed :data="borrowedData" :i="currentIndex" v-show="show==2"></Borrowed>
+    <Borrowing :data="borrowingData" :i="currentIndex" v-show="currentIndex<2"></Borrowing>
+    <Borrowed :data="borrowedData" :i="currentIndex" v-show="currentIndex>1"></Borrowed>
     <div class="btn x" @click="scan">上架新书籍</div>
   </div>
 </template>
@@ -10,7 +10,6 @@
 <script>
   import Switches from 'base/switches'
   import Scroll from 'base/scroll'
-  import NoResult from 'base/noResult'
   import Borrowing from 'components/borrowing'
   import Borrowed from 'components/borrowed'
   import {scan} from "common/js/scanCode";
@@ -18,24 +17,13 @@
   export default {
     name: "user-book",
     mixins: [scan],
-    components: {Switches, Scroll, NoResult, Borrowed, Borrowing},
+    components: {Switches, Scroll, Borrowed, Borrowing},
     data() {
       return {
         switches: [{name: '已上架'}, {name: '已下架'}, {name: '借出'}, {name: '借入'}],
         currentIndex: 0,
         borrowingData: [],
         borrowedData: [],
-      }
-    },
-    computed: {
-      show() {
-        let flag;
-        if(this.currentIndex<2){
-          flag=1
-        }else{
-          flag=2
-        }
-        return flag
       }
     },
     methods: {
@@ -50,17 +38,17 @@
         })
       },
       getBorrowed() {
-        this.$http.get('/bill/index').then(r => {
+        this.$http.get('/bill-share/index').then(r => {
           if (r.status == 'success') {
             this.borrowedData = r.data.borrowUserBooks
           }
         })
       }
     },
-    mounted() {
+    activated() {
       this.getBorrowing();
       this.getBorrowed()
-    }
+    },
   }
 </script>
 
@@ -76,7 +64,7 @@
 
   .user-book-content {
     position: absolute;
-    top: 89px;
+    top: 88px;
     bottom: 98px;
     left: 0;
     right: 0;

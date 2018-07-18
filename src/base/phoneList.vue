@@ -42,8 +42,12 @@
     </div>
 
     <!-- loading 组件 -->
-    <div v-show="!data.length" class="loading-container">
+    <div v-show="!flag" class="loading-container">
       <Loading></Loading>
+    </div>
+    <!-- noResult 组件 -->
+    <div class="noResult-container" v-show="flag&&!data.length">
+      <NoResult :title="title"></NoResult>
     </div>
   </Scroll>
 </template>
@@ -51,6 +55,7 @@
 <script>
   import Scroll from 'base/scroll'
   import Loading from 'base/loading'
+  import NoResult from 'base/noResult'
   import { myDOM } from 'common/js/myutils.js'
 
   const RIGHT_ONEWORD_HEIGHT = 18
@@ -59,10 +64,12 @@
   export default {
     components: {
       Scroll,
-      Loading
+      Loading,
+      NoResult
     },
     data () {
       return {
+        title:'还没有同学加入，快去邀请加入吧',
         scrollY: -1,
         currentIndex: 0,
         // 标题上推y值（热门标题 - A 标题）
@@ -73,6 +80,10 @@
       data: {
         type: Array,
         default: []
+      },
+      flag:{
+        type:Boolean,
+        default:false
       }
     },
     watch: {
@@ -232,10 +243,12 @@
         height: 120px;
         box-sizing: border-box;
         border-bottom: 1px solid $color-border;
+        border-image: svg(b-border) 1;
         margin-left: 24px;
         padding-right: 24px;
         &:last-of-type{
           border-bottom: none;
+          border-image: none;
         }
         .person{
           height: 100%;
@@ -282,10 +295,9 @@
     }
     .list-fixed {
       position: absolute;
-      top: -1px;
+      top: 0;
       left: 0;
       width: 100%;
-      border-bottom: 1px solid $color-border;
       .fixed-title {
         height: 44px;
         line-height: 44px;
@@ -293,15 +305,12 @@
         box-sizing: border-box;
         font-size: $font-size-medium;
         color: $color-text-l;
-        background: $color-background-h;
+        background: #fff svg(b-border);
         text-align: left;
       }
     }
-    .loading-container {
-      position: absolute;
-      width: 100%;
-      top: 50%;
-      transform: translateY(-50%);
+    .loading-container ,.noResult-container{
+      @extend %middle;
     }
   }
 </style>

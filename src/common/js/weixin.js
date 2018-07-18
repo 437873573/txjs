@@ -21,7 +21,7 @@ function getSearchString(key) {
 
 const weixin = {
   config: {
-    url: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + window.appId + '&redirect_uri=' + encodeURIComponent(window.location.href) + '&response_type=code&scope=snsapi_userinfo#wechat_redirect',
+    url: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + window.appId + '&redirect_uri=' + encodeURIComponent(window.location.origin) + '&response_type=code&scope=snsapi_userinfo#wechat_redirect',
     userInfo: JSON.parse(localStorage.getItem('MY_USER_INFO')),
     api: window.apiHost,
   },
@@ -39,10 +39,10 @@ const weixin = {
     if (r != null) return unescape(r[2]);
     return null;
   },
-  getUser: function (code) {
+  getUser: function (code,state) {
     $.ajax({
       type: 'get',
-      url: weixin.config.api + '/third/wechat/access-token?code=' + code + '&user_id=' + userId,
+      url: weixin.config.api + '/third/wechat/access-token?code=' + code + '&state='+state+'&user_id=' + userId,
       cache: false,
       async: false,
       // dataType: 'jsonp',
@@ -60,7 +60,7 @@ const weixin = {
       return JSON.parse(localStorage.getItem('MY_USER_INFO'));
     } else {
       if (weixin.getQueryString('code') != null) {
-        weixin.getUser(weixin.getQueryString('code'));
+        weixin.getUser(weixin.getQueryString('code'),weixin.getQueryString('state'));
         return JSON.parse(localStorage.getItem('MY_USER_INFO'));
       } else {
         window.location.href = weixin.config.url;

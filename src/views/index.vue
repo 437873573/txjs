@@ -29,29 +29,34 @@
           </div>
         </div>
         <nav>
-          <router-link tag="div" :to="{path:'/user/userBook'}">
+          <router-link tag="div" :to="{path:'/user/book'}">
             <div class="img"><img src="../common/img/home_icon_personal.png" alt=""></div>
             <span>我的图书</span></router-link>
-          <router-link tag="div" :to="{path:'/'}">
+          <router-link tag="div" :to="{path:'/total'}">
             <div class="img"><img src="../common/img/home_icon_star.png" alt=""></div>
             <span>阅读之星</span></router-link>
           <router-link tag="div" :to="{path:'/news'}">
             <div class="img"><img src="../common/img/home_icon_find.png" alt=""></div>
             <span>发现更多</span></router-link>
-          <div @click="sign">
+          <div @click="sign" class="sign">
             <div class="img">
               <img src="../common/img/home_icon_sign.png" alt="">
             </div>
             <span>{{user.sign?'已签到':'每日签到'}}</span>
+            <div class="add" ref="add">+1</div>
           </div>
         </nav>
         <!-- 图书推荐列表 -->
-        <div class="recommend-list">
+        <div class="recommend-list" v-show="show&&lists.length">
           <BookList :lists="lists" @select="selectItem"></BookList>
         </div>
         <!-- loading 组件 -->
-        <div class="loading" v-show="!lists.length">
+        <div class="loading-container" v-show="!show">
           <Loading></Loading>
+        </div>
+        <!-- noResult 组件 -->
+        <div class="noResult-container" v-show="show&&!lists.length">
+          <NoResult :title="title"></NoResult>
         </div>
       </div>
     </Scroll>
@@ -63,8 +68,9 @@
   import Slider from 'base/slider'
   import Scroll from 'base/scroll'
   import Loading from 'base/loading'
+  import NoResult from 'base/noResult'
   import BookList from 'base/bookList'
-  import {mapActions, mapGetters} from 'vuex'
+  import {mapGetters} from 'vuex'
   import {scan} from "common/js/scanCode";
 
   export default {
@@ -74,6 +80,7 @@
       Slider,
       Scroll,
       Loading,
+      NoResult,
       BookList
     },
     computed: {
@@ -84,7 +91,9 @@
         banners: [],
         lists: [],
         data: {},
-        searchMin: false
+        title: '暂无图书',
+        searchMin: false,
+        show: false,
       }
     },
     methods: {
@@ -94,7 +103,11 @@
             if (r.status == 'success') {
               this.$http.get('/profile').then(r => {
                   if (r.status == 'success') {
-                    this.$store.commit('SET_USER', r.data.user)
+                    this.$store.commit('SET_USER', r.data.user);
+                    this.$refs.add.classList.add("beer");
+                    setTimeout(()=>{
+                      this.$refs.add.classList.remove("beer");
+                    },1100)
                   }
                 }
               ).catch(err => console.log(err));
@@ -103,10 +116,8 @@
         }
       },
       selectItem(item) {
-        this.$router.push({path: `/index/${item.id}`});
-        this.selectBook({
-          book: item
-        })
+        this.$router.push({path: `/book/${item.id}`});
+        this.$store.commit('SET_BOOK', item);
       },
       scroll(pos) {
         // console.log(pos.y)
@@ -136,7 +147,6 @@
           }
         });
       },
-      ...mapActions(['selectBook'])
     },
     beforeCreate() {
       this.probeType = 3;
@@ -144,7 +154,7 @@
     },
     activated() {
       //获取轮播图
-      this.$http.get('/banner').then(r => {
+      this.$http.get('/banner',{params:{type:1}}).then(r => {
         // console.log(r)
         if (r.status == 'success') {
           this.banners = r.data.banners;
@@ -156,6 +166,7 @@
         this.$http.get('/book').then(r => {
           // console.log(r)
           if (r.status == 'success') {
+            this.show = true;
             this.lists = r.data.books.data
           }
         })
@@ -174,6 +185,11 @@
     width: 100%;
     top: 0;
     bottom: 98px;
+  }
+
+  .recommend-content {
+    height: 100%;
+    overflow: hidden;
   }
 
   .searchMinBox {
@@ -206,11 +222,6 @@
     > i:last-of-type {
       font-size: 40px;
     }
-  }
-
-  .recommend-content {
-    height: 100%;
-    overflow: hidden;
   }
 
   .slider-wrapper {
@@ -283,12 +294,29 @@
         font-size: $font-size-medium;
       }
     }
+    .sign {
+      position: relative;
+      .add {
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        color: $color-theme;
+        opacity: 0;
+        &.beer {
+          animation: add 1s linear forwards;
+        }
+      }
+    }
   }
 
-  .loading {
+  .loading-container, .noResult-container {
+    height: 540px;
     position: relative;
-    width: 100%;
-    height: 600px;
+    .loading, .no-result {
+      @extend %middleCenter;
+    }
   }
 
   .fade-enter-active, .fade-leave-active {
@@ -297,5 +325,24 @@
 
   .fade-enter, .fade-leave-to {
     opacity: 0;
+  }
+
+  @keyframes add {
+    0% {
+      transform: translate3d(-50%, 0, 0);
+      opacity: 0;
+    }
+    20% {
+      transform: translate3d(-50%, -8px, 0);
+      opacity: 1;
+    }
+    80% {
+      transform: translate3d(-50%, -32px, 0);
+      opacity: 1;
+    }
+    100% {
+      transform: translate3d(-50%, -40px, 0);
+      opacity: 0;
+    }
   }
 </style>

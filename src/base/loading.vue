@@ -1,11 +1,9 @@
 <template>
-  <div class="loading-container">
-    <div class="loading">
-      <div class="img">
-        <img src="../common/img/loading.gif">
-      </div>
-      <p class="desc">{{ title }}</p>
+  <div class="loading">
+    <div class="img">
+      <img src="../common/img/loading.gif">
     </div>
+    <p class="desc">{{ title }}</p>
   </div>
 </template>
 
@@ -24,13 +22,11 @@
 <style scoped lang="scss">
   @import 'common/scss/const.scss';
   @import "common/scss/mymixin.scss";
-  .loading-container{
-    @extend %middle
-  }
+
   .loading {
     width: 100%;
     text-align: center;
-    .img{
+    .img {
       display: inline-block;
       width: 24px;
       height: 24px;

@@ -17,9 +17,9 @@
           </div>
           <div class="btns" v-else-if="v.type=='LEND'">
             <div class="btn" v-if="v.status=='READING'" @click.stop="update(v,'FINISHED')">书已归还</div>
-            <div class="btn" v-else-if="v.status=='APPLYING'" @click.stop="update(v,'AGREE')">同意申请</div>
-            <div class="btn o" v-else-if="v.status=='APPLYING'" @click.stop="update(v,'REJECT')">拒绝申请</div>
-            <div class="btn disabled" v-else-if="v.status=='AGREE'">等待归还</div>
+            <div class="btn" v-if="v.status=='APPLYING'" @click.stop="update(v,'AGREE')">同意申请</div>
+            <div class="btn o" v-if="v.status=='APPLYING'" @click.stop="update(v,'REJECT')">拒绝申请</div>
+            <div class="btn disabled" v-if="v.status=='AGREE'">等待归还</div>
           </div>
         </div>
       </li>
@@ -60,10 +60,10 @@
     },
     methods: {
       selectItem(id) {
-        this.$router.push({path: '/order', query: {id: id}})
+        this.$router.push({path: `/course/${id}`})
       },
       update(v,status) {
-        this.$http.post('/bill/share-update', {id:v.id, status: status}).then(r => {
+        this.$http.post('/bill-share/update', {id:v.id, status: status}).then(r => {
           if (r.status == 'success') {
               v.status=status
           }

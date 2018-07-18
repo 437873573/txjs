@@ -1,26 +1,27 @@
 <template>
   <main class="share">
     <Switches :switches="switches" :currentIndex="currentIndex" @switch="selectItem"></Switches>
-    <ClassmateList class="share-content" v-show="currentIndex==0" :classmate="classLists"></ClassmateList>
-    <LibraryBookList class="share-content" v-show="currentIndex==1" :lists="libraryLists"></LibraryBookList>
+    <Classmate class="share-content" v-show="currentIndex==0" :classmate="classLists" :flag="flag"></Classmate>
+    <Library class="share-content" v-show="currentIndex==1" :lists="libraryLists"></Library>
     <router-view></router-view>
   </main>
 </template>
 
 <script>
   import Switches from 'base/switches'
-  import ClassmateList from 'components/classmateList'
-  import LibraryBookList from 'components/libraryBookList'
+  import Classmate from 'components/shareClassmate'
+  import Library from 'components/shareLibrary'
 
   export default {
     name: "share",
-    components: {Switches, ClassmateList, LibraryBookList},
+    components: {Switches, Classmate, Library},
     data() {
       return {
         switches: [{name: '本班级'}, {name: '图书馆'}],
         currentIndex: 0,
         libraryLists: [],
-        classLists: []
+        classLists: [],
+        flag:false
       }
     },
     methods: {
@@ -76,6 +77,7 @@
         this.$http.get('/book/class-student').then(r => {
           // console.log(r)
           if (r.status == 'success') {
+            this.flag=true;
             this.classLists = this._formatClassmate(r.data.students)
           }
         })

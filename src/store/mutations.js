@@ -3,6 +3,9 @@
 import * as types from './mutations-type.js'
 
 const mutations = {
+  [types.SET_BOUND](state, bound) {
+    state.bound = bound
+  },
   [types.SET_USER](state, user) {
     state.user = user
   },
@@ -12,24 +15,30 @@ const mutations = {
   [types.SET_BOOK](state, book) {
     state.book = book
   },
-  [types.SET_SHOWDETAIL](state,showDetail){
-    state.showDetail=showDetail
-  },
   [types.SET_SHELF](state, shelf) {
     state.shelf = shelf
   },
-  [types.SET_RECOMMENDLIST](state, recommendList) {
-    state.recommendList = recommendList
+  [types.SET_CARTS](state, carts) {
+    state.carts = carts
   },
-  [types.SET_RANKLIST](state, rankList) {
+  [types.SET_BILL](state, bill) {
+    state.bill = bill
+  },
+  [types.SET_RANK_LIST](state, rankList) {
     state.rankList = rankList
   },
-  [types.SET_SEARCHHISTORY](state, searchHistory) {
+  [types.SET_GOOD_LIST](state, goodList) {
+    state.goodList = goodList
+  },
+  [types.SET_ORG_LIST](state, orgList) {
+    state.orgList = orgList
+  },
+  [types.SET_ORDER_LIST](state, orderList) {
+    state.orderList = orderList
+  },
+  [types.SET_SEARCH_HISTORY](state, searchHistory) {
     state.searchHistory = searchHistory
   },
-  [types.SET_FAVORITE_LIST](state, list) {
-    state.favoriteList = list
-  }
-}
+};
 
 export default mutations

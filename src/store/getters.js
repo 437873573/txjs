@@ -1,19 +1,25 @@
 // 映射及计算
 
-export const user = state => state.user
+export const bound = state => state.bound;
 
-export const classmate = state => state.classmate
+export const user = state => state.user;
 
-export const book = state => state.book
+export const classmate = state => state.classmate;
 
-export const showDetail=state=>state.showDetail
+export const book = state => state.book;
 
-export const shelf = state => state.shelf
+export const shelf = state => state.shelf;
 
-export const recommendList = state => state.recommendList
+export const carts = state => state.carts;
 
-export const rankList = state => state.rankList
+export const bill = state => state.bill;
 
-export const searchHistory = state => state.searchHistory
+export const goodList = state => state.goodList;
 
-export const favoriteList = state => state.favoriteList
+export const rankList = state => state.rankList;
+
+export const orgList = state => state.orgList;
+
+export const orderList = state => state.orderList;
+
+export const searchHistory = state => state.searchHistory;

@@ -14,7 +14,7 @@ fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
+main, menu, nav, output, ruby, section, summary,
 time, mark, audio, video,input, textarea,select,button {
   margin: 0;
   padding: 0;
@@ -25,7 +25,7 @@ time, mark, audio, video,input, textarea,select,button {
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
+footer, header, hgroup,main, menu, nav, section {
   display: block;
 }
 i, em {
@@ -73,9 +73,10 @@ fieldset, img { border: 0; } /* img 搭车：让链接里的 img 无边框 */
 /* 重置表格元素 */
 table { border-collapse: collapse; border-spacing: 0; }
 
-/* 清除浮动 */
-.fl { float: left; }
-.fr { float: right; }
-.clearfix:after { display: block; clear: both; content: ""; visibility: hidden; height: 0; }
-.clearfix { zoom: 1; }
-
+.amap-logo, .amap-copyright {
+  display: none !important;
+}
+.amap-icon{
+  width: 58px;
+  height: 72px;
+}

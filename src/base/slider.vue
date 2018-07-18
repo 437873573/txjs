@@ -209,7 +209,7 @@
   @import 'common/scss/mymixin.scss';
 
   .my-slider {
-    min-height: 1px;
+    min-height: 320px;
     .slider-group {
       position: relative;
       overflow: hidden;

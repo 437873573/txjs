@@ -36,13 +36,6 @@ http.interceptors.response.use(
         return data;
         break;
       case 'fail':
-        let mess = '';
-        for (var k in data.data) {
-          data.data[k].forEach((v, i) => {
-            mess += `<p>` + v + `</p>`
-          })
-        }
-        data.mess = mess;
         return data;
         break;
       case 'error':

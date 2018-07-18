@@ -45,7 +45,7 @@
         })
       },
     },
-    mounted(){
+    activated(){
       this.getLog()
     }
   }
@@ -85,6 +85,7 @@
     .item {
       height: 120px;
       border-bottom: 1px solid $color-border;
+      border-image: svg(b-border) 1 ;
       padding: 0 24px;
       box-sizing: border-box;
       @extend %between;
@@ -92,6 +93,7 @@
       background: #FFF;
       &:last-of-type {
         border-bottom: none;
+        border-image: none;
       }
       .left {
         @extend %center;

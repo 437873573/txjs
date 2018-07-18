@@ -1,116 +1,140 @@
 <template>
   <section class="info">
-    <input type="text" placeholder="请输入您的姓名" v-model="name">
     <div class="select">
-      <input type="text" placeholder="请选择您所在的地区" v-model="areaStatus" @click.prevent="maskStatus" ref="place">
-      <i></i>
+      <input type="text" placeholder="请输入您的姓名" v-model="name" @click="error.realname=''">
+      <p v-show="error.realname" v-html="error.realname"></p>
     </div>
     <div class="select">
-      <input type="text" placeholder="请选择您所在的学校" v-model="sname" @click="showList=true">
-      <Scroll class="school-list" v-show="showList" :data="schoolList">
-        <ul>
-          <li v-if="!schoolList.length">查询不到此学校，请确认后再输入</li>
-          <li v-else v-for="v in schoolList"
-              :class="{selected:schoolId==v.id}"
-              :key="v.id"
-              @click="click(v)">{{v.name}}</li>
-        </ul>
-      </Scroll>
+      <input type="text" ref="area"
+             placeholder="请选择您所在的地区"
+             v-model="areaStatus"
+             @click="areaShow">
       <i></i>
+      <p v-show="error.area" v-html="error.area"></p>
     </div>
     <div class="select">
-      <select v-model="gradeId">
-        <option value=0>请选择您所在的年级</option>
-        <option :value="v" v-for="v in 9">{{grade[v-1]}}年级</option>
-      </select>
+      <input type="text" ref="school"
+             placeholder="请选择您所在的学校"
+             v-model="schoolStatus"
+             @click="schoolShow">
       <i></i>
+      <p v-show="error.school_id" v-html="error.school_id"></p>
     </div>
     <div class="select">
-      <select v-model="classId">
-        <option value="0">请选择您所在的班级</option>
-        <option :value="v" v-for="v in 30">{{v}}班</option>
-      </select>
+      <input type="text" ref="grade"
+             placeholder="请选择您所在的年级"
+             v-model="gradeStatus"
+             @click="gradeShow">
       <i></i>
+      <p v-show="error.grade" v-html="error.grade"></p>
     </div>
-    <div class="btn x" @click="sub">完成</div>
-    <router-link tag="div" class="noSchool" :to="{name:'create'}">找不到学校？点击这里申请开通</router-link>
-    <AreaSelect :data="areaList"
-                :status="areaSelect"
+    <div class="select">
+      <input type="text" ref="team"
+             placeholder="请选择您所在的班级"
+             v-model="classStatus"
+             @click="classShow">
+      <i></i>
+      <p v-show="error.class" v-html="error.class"></p>
+    </div>
+    <div class="btn x" @click="sub">{{bound===3?'确认修改':'下一步'}}</div>
+    <router-link tag="div" class="noSchool" :to="{name:'create'}" v-show="!bound">找不到学校？点击这里申请开通</router-link>
+
+    <SelectArea :status="areaSelect"
                 :class="{'none':!areaSelect}"
                 :area='areaStatus'
-                @areashow="maskStatus"
-                @get="getSchool"
+                @areaShow="areaShow"
                 @update:area="val => areaStatus = val">
-    </AreaSelect>
+    </SelectArea>
+    <SelectSchool ref="selectSchool"
+                  :status="schoolSelect"
+                  :class="{'none':!schoolSelect}"
+                  :school='schoolStatus'
+                  @schoolShow="schoolShow"
+                  @update:school="val => schoolStatus = val">
+    </SelectSchool>
+    <SelectGrade :status="gradeSelect"
+                 :class="{'none':!gradeSelect}"
+                 :grade='gradeStatus'
+                 @gradeShow="gradeShow"
+                 @update:grade="val => gradeStatus = val">
+    </SelectGrade>
+    <SelectClass :status="classSelect"
+                 :class="{'none':!classSelect}"
+                 :team='classStatus'
+                 @classShow="classShow"
+                 @update:team="val => classStatus = val">
+    </SelectClass>
   </section>
 </template>
 
 <script>
-  import AreaSelect from 'base/areaSelect'
-  import Scroll from 'base/scroll'
-  import {AREAS} from 'common/js/area.js'
+  import SelectArea from 'base/selectArea'
+  import SelectSchool from 'base/selectSchool'
+  import SelectGrade from 'base/selectGrade'
+  import SelectClass from 'base/selectClass'
+  import {mapGetters} from 'vuex'
 
   export default {
     name: "info",
-    components: {AreaSelect,Scroll},
-    computed:{
-      schoolList(){
-        let _this = this;
-        let NewItems = [];
-        this.school.map(function(item) {
-          if (item.name.search(_this.sname) != -1) {
-            NewItems.push(item);
-          }
-        });
-        return NewItems;
-      }
+    components: {SelectArea, SelectSchool, SelectGrade, SelectClass},
+    computed: {
+      ...mapGetters(['bound', 'user'])
     },
     data() {
       return {
         name: '',
-        sname:'',
-        schoolId: 0,
-        gradeId: 0,
-        classId: 0,
         provinceId: 0,
         cityId: 0,
         regionId: 0,
-        school: [],
-        grade: ['一', '二', '三', '四', '五', '六', '七', '八', '九'],
+        schoolId: 0,
+        gradeId: 0,
+        classId: 0,
+        error: {
+          realname: '',
+          area: '',
+          school_id: '',
+          grade: '',
+          class: ''
+        },
         areaStatus: '',
-        areaList: [],
         areaSelect: false,
-        showList:false
+        schoolStatus: '',
+        schoolSelect: false,
+        gradeStatus: '',
+        gradeSelect: false,
+        classStatus: '',
+        classSelect: false
       }
     },
     methods: {
-      click(item){
-        this.schoolId=item.id;
-        this.sname=item.name
-        setTimeout(()=>{
-          this.showList=false
-        },100)
-      },
-      maskStatus() {
-        this.$refs.place.blur();
-        this.showList=false;
+      areaShow(area) {
+        this.$refs.area.blur();
+        this.error.area = '';
+        this.error.school_id = '';
+        this.schoolStatus = '';
         this.areaSelect = !this.areaSelect;
-      },
-      getSchool(ids) {
-        if (ids.provinceId && ids.cityId) {
-          this.$http.get('/school', {
-            params: {
-              province_id: ids.provinceId,
-              city_id: ids.cityId,
-              area_id: ids.regionId
-            }
-          }).then(r => {
-            // console.log(r.data.schools);
-            this.school = r.data.schools;
-            this.sname=''
-            // console.log(this.school);
-          }).catch(e => console.log(e))
+        if (area.provinceId && area.cityId && area.regionId) {
+          this.$refs.selectSchool.getSchool(area)
         }
+      },
+      schoolShow(id) {
+        this.$refs.school.blur();
+        if (this.areaStatus) {
+          this.schoolId = id;
+          this.schoolSelect = !this.schoolSelect;
+        } else {
+          this.error.school_id = '请先选择正确的所在地区'
+        }
+      },
+      gradeShow(id) {
+        this.$refs.grade.blur();
+        this.gradeId = id;
+        this.gradeSelect = !this.gradeSelect;
+      },
+      classShow(id) {
+        this.$refs.team.blur();
+        this.classId = id;
+        this.classSelect = !this.classSelect;
       },
       sub() {
         this.$http.post('/school-bind', {
@@ -119,18 +143,35 @@
           grade: this.gradeId,
           class: this.classId
         }).then(r => {
-          if (r.status == 'success') {
-            this.$emit('success')
-          } else {
-            this.$emit('show', r.mess)
+          if (r.status === 'success') {
+            this.$emit('next')
+          } else if (r.status === 'fail') {
+            for (let k in r.data) {
+              // console.log(k,data.data[k])
+              this.error[k] = r.data[k][0]
+            }
+            if (!this.areaStatus) {
+              this.error.area = '请选择所在地区'
+            }
           }
         })
       },
     },
-    created() {
-      this.areaList = AREAS;
-      this.$emit('status', true);
-    },
+    mounted() {
+      if (this.user.realname) {
+        this.name = this.user.realname;
+        this.provinceId = this.user.school_province_id;
+        this.cityId = this.user.school_city_id;
+        this.regionId = this.user.school_area_id;
+        this.schoolId = this.user.school_id;
+        this.gradeId = this.user.grade;
+        this.classId = this.user.class;
+        this.areaStatus = this.user.school_province + ' ' + this.user.school_city + ' ' + this.user.school_area;
+        this.schoolStatus = this.user.school_name;
+        this.gradeStatus = this.user.grade_name;
+        this.classStatus = this.user.class_name;
+      }
+    }
   }
 </script>
 
@@ -141,31 +182,7 @@
 
   .info {
     width: 580px;
-    margin: 50px auto 0;
-    .school-list{
-      position: absolute;
-      width: 100%;
-      height: 280px;
-      overflow: hidden;
-      z-index: 3;
-      background: #fff;
-      border: 1px solid $color-border;
-      li{
-        font-size: $font-size-medium-x;
-        padding: 20px 24px;
-        border-bottom: 1px solid $color-border;
-        text-align: left;
-        color: #333;
-        box-sizing: border-box;
-        &:last-of-type{
-          border-bottom: none;
-        }
-        &.selected{
-          background: $color-theme;
-          color: #fff;
-        }
-      }
-    }
+    margin: 0 auto 0;
     .noSchool {
       text-align: left;
       margin-top: 30px;

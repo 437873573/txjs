@@ -1,19 +1,19 @@
 <template>
   <main class="user">
     <header>
-      <router-link class="head" tag="div" :to="{path:'/user/userInfo'}">
+      <router-link class="head" tag="div" :to="{path:'/user/info'}">
         <div class="img">
           <img v-lazy="user.avatar">
         </div>
         <h2 v-html="user.realname"></h2>
       </router-link>
       <div class="info">
-        <router-link tag="div" class="coin" :to="{path:'/user/userCoin'}">
+        <router-link tag="div" class="coin" :to="{path:'/user/coin'}">
           <h5 v-html="user.coin"></h5>
           <h4>借书豆</h4>
         </router-link>
         <div class="line"></div>
-        <router-link tag="div" class="credit" :to="{path:'/user/userCredit'}">
+        <router-link tag="div" class="credit" :to="{path:'/user/credit'}">
           <h5 v-html="user.credit"></h5>
           <h4>信用值</h4>
         </router-link>
@@ -21,42 +21,47 @@
     </header>
     <nav>
       <ul class="nav">
-        <!--<li class="nli">-->
-          <!--<div class="img">-->
-            <!--<img src="../common/img/personal_icon_dd_sm.png" alt="">-->
-          <!--</div>-->
-          <!--<h3>我的订单</h3>-->
-        <!--</li>-->
-        <router-link tag="li" class="nli" :to="{path:'/user/userBook'}">
+        <router-link tag="li" class="nli" :to="{path:'/user/bill'}">
+          <div class="img">
+            <img src="../common/img/personal_icon_dd_sm.png" alt="">
+          </div>
+          <h3>商城订单</h3>
+          <i class="icon-tabbar_icon_more_selected"></i>
+        </router-link>
+        <router-link tag="li" class="nli" :to="{path:'/user/book'}">
           <div class="img">
             <img src="../common/img/home_icon_personal_sm.png" alt="">
           </div>
           <h3>我的图书</h3>
+          <i class="icon-tabbar_icon_more_selected"></i>
         </router-link>
-        <router-link tag="li" class="nli" :to="{path:'/user/userProof'}">
+        <router-link tag="li" class="nli" :to="{path:'/user/libProofList'}">
+          <div class="img">
+            <img src="../common/img/nav_icon_class.png" alt="">
+          </div>
+          <h3>图书馆借书单</h3>
+          <i class="icon-tabbar_icon_more_selected"></i>
+        </router-link>
+        <router-link tag="li" class="nli" :to="{path:'/user/orgProofList'}">
           <div class="img">
             <img src="../common/img/nav_icon_library.png" alt="">
           </div>
-          <h3>图书馆书单</h3>
+          <h3>机构借书单</h3>
+          <i class="icon-tabbar_icon_more_selected"></i>
         </router-link>
-        <!--<router-link tag="li" class="nli" :to="{path:'/user/userMess'}">-->
-          <!--<div class="img">-->
-            <!--<img src="../common/img/nav_icon_news_sm.png" alt="">-->
-          <!--</div>-->
-          <!--<h3>我的消息</h3>-->
-        <!--</router-link>-->
+        <router-link tag="li" class="nli" :to="{path:'/user/success'}">
+          <div class="img">
+            <img src="../common/img/nav_icon_news_sm.png" alt="">
+          </div>
+          <h3>我的成就</h3>
+          <i class="icon-tabbar_icon_more_selected"></i>
+        </router-link>
         <!--<router-link tag="li" class="nli" :to="{path:'/user/userCollect'}">-->
           <!--<div class="img">-->
             <!--<img src="../common/img/personal_icon_sc_sm.png" alt="">-->
           <!--</div>-->
           <!--<h3>我的收藏</h3>-->
         <!--</router-link>-->
-        <!--<li class="nli">-->
-          <!--<div class="img">-->
-            <!--<img src="../common/img/nav_icon_library.png" alt="">-->
-          <!--</div>-->
-          <!--<h3>学校借阅</h3>-->
-        <!--</li>-->
       </ul>
     </nav>
     <router-view></router-view>
@@ -118,7 +123,7 @@
     }
     .line {
       flex: none;
-      width: 2px;
+      width: 3px;
       height: 60px;
       background: $color-background;
     }
@@ -137,11 +142,14 @@
   .nli{
     height: 108px;
     border-bottom: 1px solid $color-border;
+    border-image: svg(b-border) 1 1;
+    background: #fff;
     padding: 0 24px;
     box-sizing: border-box;
-    background: $color-background-h;
+    position: relative;
     &:last-of-type{
-      border-bottom: none;
+      border-bottom:none;
+      border-image:none;
     }
     @extend %start;
     .img{
@@ -152,6 +160,12 @@
     h3{
       font-size: $font-size-medium-x;
       color: $color-text-d;
+    }
+    i{
+      position: absolute;
+      top: 50%;
+      right: 24px;
+      transform: translateY(-50%);
     }
   }
 </style>

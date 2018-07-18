@@ -10,7 +10,7 @@
           <h4>出版社: {{data.publisher}}</h4>
           <h4>出版时间: {{data.pubdate}}</h4>
           <h4>ISBN: {{data.isbn}}</h4>
-          <p><span>荐</span></p>
+          <!--<p><span>荐</span></p>-->
         </div>
       </header>
       <Switches :switches="switches" :currentIndex="currentIndex" @switch="switchItem"></Switches>
@@ -63,7 +63,9 @@
     props:{
       data:{
         type:Object,
-        default:{}
+        default(){
+          return {}
+        }
       }
     },
     methods: {
@@ -85,7 +87,7 @@
               time: data.time,
               user: {
                 avatar: data.user.avatar,
-                nickname: data.user.nickname
+                realname: data.user.realname
               }
             });
             this.content = '';
@@ -239,7 +241,7 @@
       }
       footer {
         padding: 0 24px;
-        background: #fff;
+        background: #fff svg(t-border);
         box-sizing: border-box;
         input {
           height: 70px;
@@ -247,6 +249,7 @@
           border-radius: 10px;
           padding-left: 24px;
           border: 1px solid $color-border;
+          -webkit-appearance: none;
         }
         .btn {
           margin-left: 24px;

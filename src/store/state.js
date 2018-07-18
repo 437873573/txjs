@@ -5,24 +5,30 @@
 import { getStorage, getFavorite } from 'common/js/store.js'
 
 const state = {
+  //绑定信息
+  bound:0,
   //用户信息
   user:{},
   //同学信息
   classmate:{},
   //书本信息
   book:{},
-  //书籍详情页显示状态
-  showDetail:false,
+  //借书单显示状态
+  carts:0,
+  //购物车显示状态
+  bill:0,
+  //购物车列表
+  goodList:[],
+  //购物车列表
+  orderList:[],
   // 书架信息
   shelf: {},
-  // 推荐页书单
-  recommendList: {},
-  // 图书排行数据
-  rankList: {},
+  // 图书排行
+  rankList: [],
+  //机构图书
+  orgList: [],
   // 搜索结果
   searchHistory: getStorage(),
-  // 我的收藏
-  favoriteList: getFavorite()
-}
+};
 
 export default state

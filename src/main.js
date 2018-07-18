@@ -29,6 +29,13 @@ if (weixin.isweixin()) {
 } else {
   alert('请在微信端打开')
 }
+import VueAMap from 'vue-amap'
+Vue.use(VueAMap);
+VueAMap.initAMapApiLoader({
+  key: 'd4746c1af5f0760aed8b0ee002dc540b',
+  plugin: ['AMap.Geolocation'],
+  v: '1.4.8'
+});
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

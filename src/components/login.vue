@@ -2,53 +2,70 @@
   <section class="login">
     <div class="text">
       <i class='icon-login_img_phone'></i>
-      <input type="text" placeholder="请输入您的手机号" v-model="phone">
+      <input type="text" placeholder="请输入您的手机号" v-model="phone" @click="error.mobile=''">
+      <p v-show="error.mobile" v-html="error.mobile"></p>
     </div>
     <div class="code">
       <div class="text">
         <i class='icon-login_img_sec'></i>
-        <input type="text" placeholder="请输入验证码" v-model="code">
+        <input type="text" placeholder="请输入验证码" v-model="code" @click="error.scode=''">
+        <p v-show="error.scode" v-html="error.scode"></p>
       </div>
       <div class="btn o" v-show="show" @click="getCode">获取验证码</div>
       <div class="btn disabled" v-show="!show">{{count}} s</div>
     </div>
-    <div class="btn x" @click="sub">下一步</div>
+    <div class="btn x" @click="sub">{{bound===3?'确认修改':'验证完成'}}</div>
   </section>
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
+
   export default {
     name: "login",
+    computed:{
+      ...mapGetters(['bound'])
+    },
     data() {
       return {
         show: true,
         count: '',
         timer: null,
         phone: '',
-        code: ''
+        code: '',
+        error: {
+          mobile: '',
+          scode: ''
+        }
       }
     },
     methods: {
       sub() {
         this.$http.post('/mobile-bind', {mobile: this.phone, scode: this.code}).then(r => {
-          if (r.status == 'success') {
-            this.$emit('next')
-          } else if (r.status == 'fail') {
-            this.$emit('show', r.mess)
+          if (r.status === 'success') {
+            this.$emit('success')
+          } else if (r.status === 'fail') {
+            for (let k in r.data) {
+              // console.log(k,data.data[k])
+              this.error[k] = r.data[k][0]
+            }
           }
-        }).catch(e => console.log(e))
+        })
       },
       getCode() {
         if (this.phone) {
           this.$http.post('/captcha-sms', {mobile: this.phone}).then(r => {
-            if(r.status=='success'){
+            if (r.status === 'success') {
               this._countdown()
-            }else{
-              this.$emit('show', r.mess)
+            } else if (r.status === 'fail') {
+              for (let k in r.data) {
+                // console.log(k,data.data[k])
+                this.error[k] = r.data[k][0]
+              }
             }
-          }).catch(e => console.log(e))
+          })
         } else {
-          this.$emit('show', '手机号码不能为空')
+          this.error.mobile = '手机号码不能为空'
         }
       },
       _countdown() {
@@ -79,11 +96,9 @@
   .login {
     width: 580px;
     margin: 140px auto 0;
-    > div {
-      margin: 30px 0;
-    }
     .code {
       @extend %between;
+      margin: -40px 0;
       .text {
         width: 360px;
       }
