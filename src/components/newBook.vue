@@ -56,7 +56,7 @@
           id: item.id
         }).then(r => {
           if (r.status == 'success') {
-            this.$router.replace({path: '/user/userBook'})
+            this.$router.replace({path: '/user/book'})
           } else {
             this.show(r.mess)
           }
@@ -65,7 +65,7 @@
       sup(item) {
         this.$http.post('/book/share-store', {book_id: item.id}).then(r => {
           if (r.status == 'success') {
-            this.$router.replace({path: '/user/userBook'})
+            this.$router.replace({path: '/user/book'})
           } else {
             this.show(r.mess)
           }
@@ -74,7 +74,7 @@
       sub(item) {
         this.$http.post('/book/share-update', {id: item.userbook.id, action: 'NORMAL'}).then(r => {
           if (r.status === 'success') {
-            this.$router.replace({path: '/user/userBook'})
+            this.$router.replace({path: '/user/book'})
           } else {
             this.show(r.mess)
           }

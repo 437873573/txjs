@@ -49,8 +49,12 @@
     width: 100%;
     z-index: 100;
     background: #65d0ab;
+    height: 74px;
+    line-height: 74px;
+    color: #fff;
+    font-size: 32px;
     &.drop-enter-active, &.drop-leave-active {
-      transition: all 0.3s;
+      transition: all 0.8s;
     }
     &.drop-enter, &.drop-leave-to {
       transform: translate3d(0, -100%, 0);

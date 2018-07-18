@@ -32,17 +32,19 @@
     <Confirm ref="confirm" :confirmBtnText="text" :canShow="false">
       <div id="text" v-html="message"></div>
     </Confirm>
+    <TopTip ref="top">已加入购物车</TopTip>
   </div>
 </template>
 
 <script>
+  import TopTip from 'base/topTip'
   import Scroll from 'base/scroll'
   import BookSlider from 'base/bookSlider'
   import BillCar from 'base/billCar'
 
   export default {
     name: "mall-book",
-    components: {Scroll, BookSlider, BillCar},
+    components: {Scroll, BookSlider, BillCar,TopTip},
     data() {
       return {
         message: '',
@@ -56,7 +58,7 @@
         this.$http.post('/good-cart', {id: id}).then(r => {
           if (r.status === 'success') {
             this.$refs.billCar.getList();
-            this.$router.back()
+            this.$refs.top.show()
           } else {
             this.message = r.mess;
             this.$refs.confirm.show()
@@ -102,7 +104,9 @@
     @extend %cover;
     z-index: 3;
   }
-
+  .top{
+    color: #fff;
+  }
   .billCar {
     position: fixed;
     bottom: 128px;

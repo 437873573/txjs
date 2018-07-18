@@ -38,7 +38,7 @@
       methods: {
         borrow() {
           let id=this.$route.params.id;
-          this.$http.post('/bill-mechanism/store', {mechanism_book_ids: [id]}).then(r => {
+          this.$http.post('/bill-mechanism/store', {mechanism_book_ids: [this.data.mechanism[0].origin_id]}).then(r => {
             if (r.status === 'success') {
               this.$router.replace({path:`/orgProof/${r.data.id}`});
             }else if(r.status==='error'){

@@ -28,7 +28,8 @@
     },
     methods: {
       selectItem(item) {
-        this.$router.push({path: `/book/${item.id}`});
+        console.log(item)
+        this.$router.push({path: `/book/${item.mechanism_id}`});
         this.$store.commit('SET_BOOK', item)
       },
     },

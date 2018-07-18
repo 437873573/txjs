@@ -57,15 +57,8 @@
     },
     methods: {
       borrow() {
-        let hash = window.location.hash;
-        // console.log(hash)
-        if (hash.search('share') != -1) {
-          this.oid = this.data.user[0].origin_id;
-          this.toOrder()
-        } else if (this.data.user.length) {
-          this.$refs.userLists.style.width = 168 * this.data.user.length / 7.5 + 'vw';
-          this.$refs.confirm.show()
-        }
+        this.$refs.userLists.style.width = 168 * this.data.user.length / 7.5 + 'vw';
+        this.$refs.confirm.show()
       },
       toOrder() {
         this.$http.post('/bill-share/store', {user_book_id: this.oid}).then(r => {
@@ -100,17 +93,17 @@
 
   footer {
     /*<!--.mark {-->*/
-      /*<!--width: 250px;-->*/
-      /*<!--@extend %between;-->*/
-      /*<!--flex-direction: column;-->*/
-      /*<!--padding: 10px 0;-->*/
-      /*<!--box-sizing: border-box;-->*/
-      /*<!--font-size: $font-size-small-x;-->*/
-      /*<!--background: #fff;-->*/
-      /*<!--color: $color-theme;-->*/
-      /*<!--i {-->*/
-        /*<!--font-size: 48px;-->*/
-      /*<!--}-->*/
+    /*<!--width: 250px;-->*/
+    /*<!--@extend %between;-->*/
+    /*<!--flex-direction: column;-->*/
+    /*<!--padding: 10px 0;-->*/
+    /*<!--box-sizing: border-box;-->*/
+    /*<!--font-size: $font-size-small-x;-->*/
+    /*<!--background: #fff;-->*/
+    /*<!--color: $color-theme;-->*/
+    /*<!--i {-->*/
+    /*<!--font-size: 48px;-->*/
+    /*<!--}-->*/
     /*<!--}-->*/
     .borrow {
       width: 100%;
@@ -140,7 +133,7 @@
     @extend %start;
     li {
       width: 120px;
-      margin-right:20px;
+      margin-right: 20px;
       @extend %center;
       flex-direction: column;
       .img {
@@ -174,7 +167,7 @@
         margin-top: 6px;
         font-size: $font-size-small-x;
       }
-      &:last-of-type{
+      &:last-of-type {
         margin-right: 0;
       }
     }

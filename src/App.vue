@@ -59,7 +59,7 @@
           }
         });
       }, 500);
-      // this.share()
+      this.share()
     },
   }
 </script>

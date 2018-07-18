@@ -2,10 +2,10 @@
   <main class="index">
     <transition name="fade">
       <div class="searchMinBox" v-show="searchMin">
-        <i class="icon-nav_icon_scan" @click="scan"></i>
-        <router-link tag="div" :to="{path:'/search'}" class="searchMin"><i class="icon-btn_icon_search"></i>&nbsp;&nbsp;在这里搜你想要的书籍
+        <router-link tag="div" :to="{path:'/search'}" class="searchMin">
+          <i class="icon-btn_icon_search"></i>&nbsp;&nbsp;在这里搜你想要的书籍
         </router-link>
-        <i class="icon-nav_icon_news"></i>
+        <i class="icon-nav_icon_scan" @click="scan"></i>
       </div>
     </transition>
     <Scroll class="recommend-content"
@@ -16,17 +16,17 @@
             @scroll="scroll">
       <div>
         <section class="slider-wrapper" v-if="banners.length">
-          <div class="scan"><i class="icon-nav_icon_scan" @click="scan"></i></div>
-          <div class="news"><i class="icon-nav_icon_news"></i></div>
           <Slider>
             <div v-for="banner in banners">
               <img :src="banner.image" @load="loadImg" @error="error">
             </div>
           </Slider>
+          <div class="scan"><i class="icon-nav_icon_scan" @click="scan"></i></div>
         </section>
         <div class="searchBox" ref="searchBox">
-          <div class="search" ref="search" @click="$router.push({path:'/search'})"><i class="icon-btn_icon_search"></i>&nbsp;&nbsp;在这里搜你想要的书籍
-          </div>
+          <router-link tag="div" class="search" ref="search" :to="{path:'/search'}">
+            <i class="icon-btn_icon_search"></i>&nbsp;&nbsp;在这里搜你想要的书籍
+          </router-link>
         </div>
         <nav>
           <router-link tag="div" :to="{path:'/user/book'}">
@@ -152,7 +152,7 @@
       this.probeType = 3;
       this.listenScroll = true
     },
-    activated() {
+    mounted() {
       //获取轮播图
       this.$http.get('/banner',{params:{type:1}}).then(r => {
         // console.log(r)
@@ -203,7 +203,7 @@
     border-bottom: 1px solid $color-border;
     @extend %between;
     .searchMin {
-      width: 80%;
+      width: 90%;
       height: 100%;
       border-radius: 10px;
       font-size: $font-size-medium;
@@ -219,35 +219,26 @@
     > i:first-of-type {
       font-size: 36px;
     }
-    > i:last-of-type {
-      font-size: 40px;
-    }
   }
 
   .slider-wrapper {
     position: relative;
     width: 100%;
     overflow: hidden;
-    .scan, .news {
+    .scan{
+      font-size: 36px;
+      right: 24px;
       position: absolute;
       top: 24px;
       width: 66px;
       height: 66px;
       background: rgba(0, 0, 0, 0.5);
       border-radius: 50%;
-      font-size: 40px;
       color: $color-text-ll;
       z-index: 2;
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-    .scan {
-      font-size: 36px;
-      left: 24px;
-    }
-    .news {
-      right: 24px;
     }
   }
 
