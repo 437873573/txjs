@@ -25,7 +25,7 @@
         </section>
         <div class="searchBox" ref="searchBox">
           <router-link tag="div" class="search" ref="search" :to="{path:'/search'}">
-            <i class="icon-btn_icon_search"></i>&nbsp;&nbsp;在这里搜你想要的书籍
+            <i class="icon-btn_icon_search"></i>&nbsp;&nbsp;在这里搜索你想要的书籍
           </router-link>
         </div>
         <nav>
