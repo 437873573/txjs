@@ -1,0 +1,45 @@
+stages:
+  - build_testing
+  - build_production
+
+cache:
+  paths:
+  - node_modules/
+
+variables:
+  TESTING_PATH: "/data0/www/txjs-wechat-hnw.mion.cn/public/"
+  STATIC_TESTING_PATH: "/data0/static/txjs-wechat/"
+  PRODUCTION_PATH: "/data0/www/wx.tongxuejieshu.com/public/"
+  STATIC_PRODUCTION_PATH: "/data0/static/txjs-wechat/"
+
+# 部署测试服务器
+build_testing:
+  stage: build_testing
+  only:
+    - develop
+  tags:
+    - testing
+  script:
+    - cd $STATIC_TESTING_PATH
+    - git pull origin master
+    - npm update
+    - npm run build
+    - rm -rf ${TESTING_PATH}public/static/ ${TESTING_PATH}resources/views/index.blade.php
+    - cp -r ${STATIC_TESTING_PATH}TXJS/static/ ${TESTING_PATH}public/
+    - cp ${STATIC_TESTING_PATH}TXJS/index.html ${TESTING_PATH}resources/views/index.blade.php
+
+# 部署生产服务器
+build_production:
+  stage: build_production
+  only:
+    - master
+  tags:
+    - production
+  script:
+    - cd $STATIC_PRODUCTION_PATH
+    - git pull origin master
+    - npm update
+    - npm run build
+    - rm -rf ${PRODUCTION_PATH}public/static/ ${PRODUCTION_PATH}resources/views/index.blade.php
+    - cp -r ${STATIC_PRODUCTION_PATH}TXJS/static/ ${PRODUCTION_PATH}public/
+    - cp ${STATIC_PRODUCTION_PATH}TXJS/index.html ${PRODUCTION_PATH}resources/views/index.blade.php
