@@ -42,7 +42,7 @@
       this.$http.get('/bill-share/index').then(r => {
         if (r.status === 'success') {
           this.data = r.data.borrowUserBooks.filter(v=>{
-            return v.status=='Borrow'&&v.type=='BORROW'
+            return v.status=='FINISHED'&&v.type=='BORROW'
           });
          this.$refs.list.style.width=this.data.length*85+24+'px'
         }

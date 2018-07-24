@@ -6,7 +6,9 @@
         <section class="slider-wrapper" v-if="banners.length">
           <Slider>
             <div v-for="banner in banners">
-              <img :src="banner.image" @load="loadImg" @error="error">
+              <a :href="banner.link">
+                <img :src="banner.image" @load="loadImg" @error="error">
+              </a>
             </div>
           </Slider>
         </section>
@@ -148,12 +150,14 @@
 <style scoped lang="scss">
   @import "common/scss/const.scss";
   @import "common/scss/mymixin.scss";
-  .billCar{
+
+  .billCar {
     position: fixed;
     bottom: 128px;
     right: 30px;
     z-index: 10;
   }
+
   .mall {
     position: fixed;
     z-index: 3;

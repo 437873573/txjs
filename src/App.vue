@@ -41,8 +41,8 @@
       this.hash()
     },
     mounted() {
-      clearTimeout(this.wait);
-      this.wait = setTimeout(() => {
+
+      let wait = setTimeout(() => {
         this.$http.get('/profile').then(r => {
           let bound = r.data.bound;
           this.$store.commit('SET_BOUND', bound);
@@ -57,9 +57,10 @@
           } else {
             this.$router.replace({path: '/bind'})
           }
+          this.share()
         });
+        clearTimeout(wait);
       }, 500);
-      this.share()
     },
   }
 </script>

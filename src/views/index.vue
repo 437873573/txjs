@@ -18,7 +18,9 @@
         <section class="slider-wrapper" v-if="banners.length">
           <Slider>
             <div v-for="banner in banners">
-              <img :src="banner.image" @load="loadImg" @error="error">
+              <a :href="banner.link">
+                <img :src="banner.image" @load="loadImg" @error="error">
+              </a>
             </div>
           </Slider>
           <div class="scan"><i class="icon-nav_icon_scan" @click="scan"></i></div>
