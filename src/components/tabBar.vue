@@ -18,7 +18,7 @@
     </router-link>
     <router-link tag="div" class="tab-item" :to="{ name: 'user' }" @click.native="index=5">
       <i :class="index==5?'icon-tabbar_icon_personal_selected':'icon-tabbar_icon_personal_default'"></i>
-      <h3 class="tab-link">个人</h3>
+      <h3 class="tab-link">我的</h3>
     </router-link>
   </header>
 </template>

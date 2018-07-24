@@ -67,15 +67,16 @@
     height: 100%;
   }
   .library-lists {
-    padding: 24px;
+    padding: 24px 0;
     box-sizing: border-box;
-    @extend %between;
+    @extend %start;
     flex-wrap: wrap;
     li {
       width: 218px;
       border-radius: 10px;
       background: $color-background-h;
       padding: 30px 0 20px;
+      margin-left: 24px;
       margin-bottom: 24px;
       box-sizing: border-box;
       @extend %start;

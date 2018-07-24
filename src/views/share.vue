@@ -69,7 +69,7 @@
         this.$http.get('/school/shelf-index').then(r => {
           // console.log(r)
           if (r.status == 'success') {
-            this.libraryLists = r.data.shelves
+            this.libraryLists = r.data.shelves.reverse()
           }
         })
       },
