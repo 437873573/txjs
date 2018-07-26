@@ -91,8 +91,13 @@
         this.provinceId = ids.provinceId;
         this.cityId = ids.cityId;
         this.regionId = ids.regionId;
+        // console.log(this.provinceId,this.cityId,this.regionId)
       },
       sub() {
+        if(!this.provinceId ||!this.cityId ||!this.regionId){
+          this.error.area = '请选择所在地区'
+          return
+        }
         this.$http.post('/school/apply', {
           type: ['PERSONAL', 'MECHANISM'][this.currentIndex],
           applicant: this.name,

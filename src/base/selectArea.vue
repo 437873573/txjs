@@ -111,11 +111,17 @@
         this.CheckArea.province = name;
         this.CheckArea.provinceId = id;
         this.CheckArea.city = this.data[it].child.length != 0 ? this.data[it].child[0].name : '';
+        this.CheckArea.cityId = this.data[it].child.length != 0 ? this.data[it].child[0].id : 0;
         this.CheckArea.region =
           this.data[it].child.length != 0
           && this.data[it].child[0].child
           && this.data[it].child[0].child.length != 0
             ? this.data[it].child[0].child[0].name : '';
+        this.CheckArea.regionId =
+          this.data[it].child.length != 0
+          && this.data[it].child[0].child
+          && this.data[it].child[0].child.length != 0
+            ? this.data[it].child[0].child[0].id : 0;
         this.checkCity = 0;
         this.checkRegion = 0;
         this.areaStatus = 2;
@@ -133,6 +139,11 @@
           && this.data[its].child[it].child
           && this.data[its].child[it].child.length != 0
             ? this.data[its].child[it].child[0].name : '';
+        this.CheckArea.regionId =
+          this.data[its].child.length != 0
+          && this.data[its].child[it].child
+          && this.data[its].child[it].child.length != 0
+            ? this.data[its].child[it].child[0].id : '';
         this.checkRegion = 0,
           this.areaStatus = 3;
         if(this.CheckArea.region==''){

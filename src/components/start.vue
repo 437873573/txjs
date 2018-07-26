@@ -6,6 +6,16 @@
     </h1>
   </main>
 </template>
+<script>
+  export default {
+    mounted(){
+      let wait = setTimeout(() => {
+        this.$router.replace({path: '/index'})
+        clearTimeout(wait);
+      }, 800);
+    }
+  }
+</script>
 <style scoped lang="scss">
   main {
     width: 100%;

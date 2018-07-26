@@ -1,13 +1,15 @@
 import wx from 'weixin-js-sdk'
 
 let url = location.href.split('#')[0];
-window.img='/logo.jpg';
-window.link='';
-window.title='同学借书';
-window.desc='同学借书微信平台提供个人图书共享，班级书籍共享，学校图书馆远程借阅管理，个人书架管理等自助的管理平台';
+window.links = '';
 export const share = {
   methods: {
-    share() {
+    share(xx) {
+      let content = xx ? xx : {};
+      let title = content.title ? content.title : '同学借书';
+      let desc = content.desc ? content.desc : '同学借书微信平台提供个人图书共享，班级书籍共享，学校图书馆远程借阅管理，个人书架管理等自助的管理平台';
+      let link = content.link ? content.link : links;
+      let img = content.img ? content.img : '/logo.jpg';
       this.$http.get('/third/jssdk/get-sign-package', {
         params: {
           url: url,
@@ -27,8 +29,8 @@ export const share = {
           }
         });
         wx.onMenuShareTimeline({
-          title: window.title, // 分享标题
-          link: window.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          title: title, // 分享标题
+          link: link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
           desc: desc, // 分享描述
           imgUrl: img, // 分享图标
           success: function () {
@@ -36,9 +38,9 @@ export const share = {
           },
         });
         wx.onMenuShareAppMessage({
-          title: window.title, // 分享标题
+          title: title, // 分享标题
           desc: desc, // 分享描述
-          link: window.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          link: link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
           imgUrl: img, // 分享图标
           type: '', // 分享类型,music、video或link，不填默认为link
           dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
@@ -47,39 +49,39 @@ export const share = {
           }
         });
         wx.onMenuShareQQ({
-          title: window.title, // 分享标题
+          title: title, // 分享标题
           desc: desc, // 分享描述
-          link: window.link, // 分享链接
+          link: link, // 分享链接
           imgUrl: img, // 分享图标
           success: function () {
-// 用户确认分享后执行的回调函数
+            // 用户确认分享后执行的回调函数
           },
           cancel: function () {
-// 用户取消分享后执行的回调函数
+            // 用户取消分享后执行的回调函数
           }
         });
         wx.onMenuShareWeibo({
-          title: window.title, // 分享标题
+          title: title, // 分享标题
           desc: desc, // 分享描述
-          link: window.link, // 分享链接
+          link: link, // 分享链接
           imgUrl: img, // 分享图标
           success: function () {
-// 用户确认分享后执行的回调函数
+            // 用户确认分享后执行的回调函数
           },
           cancel: function () {
-// 用户取消分享后执行的回调函数
+            // 用户取消分享后执行的回调函数
           }
         });
         wx.onMenuShareQZone({
-          title: window.title, // 分享标题
+          title: title, // 分享标题
           desc: desc, // 分享描述
-          link: window.link, // 分享链接
+          link: link, // 分享链接
           imgUrl: img, // 分享图标
           success: function () {
-// 用户确认分享后执行的回调函数
+            // 用户确认分享后执行的回调函数
           },
           cancel: function () {
-// 用户取消分享后执行的回调函数
+            // 用户取消分享后执行的回调函数
           }
         });
       });

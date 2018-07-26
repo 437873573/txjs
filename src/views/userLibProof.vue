@@ -4,13 +4,12 @@
       <h3>取书码</h3>
       <h2 v-if="status=='REJECT'">已过期</h2>
       <h2 v-else-if="status=='FINISHED'">已归还</h2>
-      <h2 v-else-if="status=='READING'">已取书</h2>
       <h2 v-else>{{code}}</h2>
       <h4>有效期至  {{time}}</h4>
     </header>
     <Scroll class="proof-detail">
       <div>
-        <h3>借阅书单：</h3>
+        <h3>借阅书单：<span v-show="status=='READING'">（已取书）</span></h3>
         <BookList :lists="lists"></BookList>
         <p class="notice">
           温馨提示：<br>

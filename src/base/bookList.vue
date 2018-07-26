@@ -6,7 +6,10 @@
       </div>
       <div class="text">
         <h4 v-html="item.title"></h4>
-        <h5 v-html="item.author"></h5>
+        <h5>
+          <span>{{item.author}}</span>
+          <i v-if="item.tags.length>0" v-for="v in item.tags" :key="v">{{v}}</i>
+        </h5>
         <p v-html="item.summary"></p>
       </div>
     </li>
@@ -69,16 +72,20 @@
         @include no-wrap;
       }
       h5 {
-        max-width: 360px;
-        color: $color-text-l;
-        font-size: $font-size-medium;
+        width: 100%;
         @extend %start;
-        @include no-wrap;
-        span {
+        span{
+          max-width: 360px;
+          color: $color-text-l;
+          font-size: $font-size-medium;
+        }
+        i {
           flex: none;
           display: block;
           width: 124px;
           height: 36px;
+          line-height: 36px;
+          text-align: center;
           border: 1px solid $color-theme;
           border-radius: 5px;
           margin-left: 20px;

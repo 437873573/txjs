@@ -75,6 +75,11 @@
     computed:{
       ...mapGetters(['user'])
     },
+    mounted(){
+      if(this.$store.state.bound<3){
+        this.$router.push('/bind')
+      }
+    }
   }
 </script>
 

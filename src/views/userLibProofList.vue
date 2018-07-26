@@ -8,7 +8,7 @@
         <div class="text">
           <h2>{{v.borrow_library_book_item[0].library_book.book.title}}等</h2>
           <h4>共{{v.borrow_library_book_item.length}}本</h4>
-          <h3 v-show="v.status=='APPLYING'">借书码：{{v.random_code}}</h3>
+          <h3 v-show="v.status=='APPLYING'||v.status=='READING'">借书码：{{v.random_code}}</h3>
           <!--<h3>申请人：{{v.user.realname}}</h3>-->
           <p class="not" v-if="v.status=='APPLYING'">待取书</p>
           <p v-else>{{v.status=='REJECT'?'已过期':v.status=='READING'?'已取书':'已归还'}}</p>
