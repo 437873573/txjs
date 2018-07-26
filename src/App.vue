@@ -41,7 +41,6 @@
       this.hash()
     },
     mounted() {
-
       let wait = setTimeout(() => {
         this.$http.get('/profile').then(r => {
           let bound = r.data.bound;
