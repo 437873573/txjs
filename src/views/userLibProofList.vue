@@ -46,6 +46,11 @@
         this.$router.push({path: `/libProof/${id}`})
       }
     },
+    mounted(){
+      if(this.$store.state.bound<3){
+        this.$router.replace('/bind')
+      }
+    },
     activated() {
       this.$http.get('/bill-library/index').then(r => {
         this.show=true;

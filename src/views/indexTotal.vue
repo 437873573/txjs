@@ -140,6 +140,10 @@
       }
     },
     activated() {
+      if(this.$store.state.bound<3){
+        this.$router.replace('/bind')
+        return
+      }
       this.$http.get('/statistics').then(r => {
         if (r.status == 'success') {
           this.bill_count = r.data.group.bill_count;

@@ -4,6 +4,10 @@ let url = location.href.split('#')[0];
 export const scan = {
   methods: {
     scan() {
+      if(this.$store.state.bound<3){
+        this.$router.push('/bind')
+        return
+      }
       this.$http.get('/third/jssdk/get-sign-package', {
         params: {
           url: url,

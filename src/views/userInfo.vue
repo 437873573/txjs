@@ -52,6 +52,11 @@
         }
         return str2
       }
+    },
+    mounted(){
+      if(this.$store.state.bound<3){
+        this.$router.replace('/bind')
+      }
     }
   }
 </script>
