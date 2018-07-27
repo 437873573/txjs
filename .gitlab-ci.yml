@@ -21,7 +21,7 @@ build_testing:
     - testing
   script:
     - cd $STATIC_TESTING_PATH
-    - git pull origin master
+    - git pull origin develop
     - npm update
     - npm run build
     - rm -rf ${TESTING_PATH}public/static/ ${TESTING_PATH}resources/views/index.blade.php
