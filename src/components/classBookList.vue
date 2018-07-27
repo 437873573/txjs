@@ -38,6 +38,9 @@
         this.$store.commit('SET_BOOK', item);
       },
       getList() {
+        if(!this.classmate.user_id){
+          this.$router.push({path:'/index'})
+        }
         this.$http.get('/book', {
           params: {
             user_id: this.classmate.user_id,

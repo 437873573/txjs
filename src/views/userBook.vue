@@ -46,6 +46,10 @@
       }
     },
     activated() {
+      if(this.$store.state.bound<3){
+        this.$router.replace('/bind')
+        return
+      }
       this.getBorrowing();
       this.getBorrowed()
     },

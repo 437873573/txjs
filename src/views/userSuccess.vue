@@ -6,7 +6,7 @@
       <span>我已阅读</span>
     </header>
     <Scroll class="wrapper" :data="list" :scrollX="true" :scrollY="false">
-      <ul class="list" ref="list">
+      <ul class="list" ref="list" v-show="list.length">
         <li class="item" v-for="v in list">
           <div class="img">
             <img v-lazy="v.images_large">
@@ -35,14 +35,20 @@
     },
     computed: {
       list() {
-        return this.data
+        let obj={};
+        return this.data.filter(v=>{
+          if(!obj[v.title]){
+            obj[v.title]=true
+            return v
+          }
+        })
       }
     },
     methods: {
       _share() {
         let that = this;
         this.$refs.list.style.width = this.list.length * 85 + 24 + 'px'
-        let n = this.list.length < 99 ? this.data.length : 99;
+        let n = this.list.length < 99 ? this.list.length : 99;
         let title = '用同学借书，这个月我看了' + n + '本书，每一的书都是人生的通关密码';
         let desc = '被称为时代先驱的人，阅读量都不少。我用同学借书每月读好几本书，每一次的阅读，都是在发掘知识，提升自我';
         let img = `/image/share/share-${n}.png`;
